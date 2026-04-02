@@ -6,23 +6,23 @@ namespace VRPayment\PluginCore\Tests\Transaction;
 
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
+use VRPayment\PluginCore\Address\Address;
 use VRPayment\PluginCore\Log\LoggerInterface;
+use VRPayment\PluginCore\Token\Token;
+use VRPayment\PluginCore\Token\TokenService;
 use VRPayment\PluginCore\Transaction\RecurringTransactionGatewayInterface;
 use VRPayment\PluginCore\Transaction\RecurringTransactionService;
 use VRPayment\PluginCore\Transaction\Transaction;
 use VRPayment\PluginCore\Transaction\TransactionContext;
 use VRPayment\PluginCore\Transaction\TransactionService;
-use VRPayment\PluginCore\Token\TokenService;
-use VRPayment\PluginCore\Token\Token;
-use VRPayment\PluginCore\Address\Address;
 
 class RecurringTransactionServiceTest extends TestCase
 {
-    private RecurringTransactionService $service;
-    private MockObject|TransactionService $transactionService;
     private MockObject|RecurringTransactionGatewayInterface $gateway;
-    private MockObject|TokenService $tokenService;
     private MockObject|LoggerInterface $logger;
+    private RecurringTransactionService $service;
+    private MockObject|TokenService $tokenService;
+    private MockObject|TransactionService $transactionService;
 
     protected function setUp(): void
     {
@@ -34,7 +34,7 @@ class RecurringTransactionServiceTest extends TestCase
             $this->transactionService,
             $this->gateway,
             $this->tokenService,
-            $this->logger
+            $this->logger,
         );
     }
 

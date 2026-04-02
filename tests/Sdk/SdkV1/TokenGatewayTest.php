@@ -10,15 +10,15 @@ use Psr\Log\LoggerInterface;
 use VRPayment\PluginCore\Sdk\SdkProvider;
 use VRPayment\PluginCore\Sdk\SdkV1\TokenGateway;
 use VRPayment\PluginCore\Token\Token;
-use VRPayment\Sdk\Model\Token as SdkToken;
 use VRPayment\Sdk\Model\CreationEntityState;
+use VRPayment\Sdk\Model\Token as SdkToken;
 use VRPayment\Sdk\Service\TokenService as SdkTokenService;
 
 class TokenGatewayTest extends TestCase
 {
     private TokenGateway $gateway;
-    private MockObject|SdkProvider $sdkProvider;
     private MockObject|LoggerInterface $logger;
+    private MockObject|SdkProvider $sdkProvider;
     private MockObject|SdkTokenService $tokenService;
 
     protected function setUp(): void

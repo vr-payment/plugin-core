@@ -4,13 +4,13 @@ declare(strict_types=1);
 
 namespace VRPayment\PluginCore\Sdk\SdkV1;
 
+use Psr\Log\LoggerInterface;
+use VRPayment\PluginCore\Sdk\SdkProvider;
+use VRPayment\PluginCore\Token\State as StateEnum;
 use VRPayment\PluginCore\Token\Token;
 use VRPayment\PluginCore\Token\TokenGatewayInterface;
-use VRPayment\PluginCore\Token\State as StateEnum;
-use VRPayment\Sdk\Service\TokenService as SdkTokenService;
 use VRPayment\Sdk\Model\Token as SdkToken;
-use VRPayment\PluginCore\Sdk\SdkProvider;
-use Psr\Log\LoggerInterface;
+use VRPayment\Sdk\Service\TokenService as SdkTokenService;
 
 /**
  * SDK implementation of the TokenGatewayInterface.

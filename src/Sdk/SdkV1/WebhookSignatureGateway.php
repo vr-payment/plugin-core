@@ -12,7 +12,7 @@ use VRPayment\Sdk\Service\WebhookEncryptionService as SdkWebhookEncryptionServic
 /**
  * Class WebhookSignatureGateway
  *
- * Implementation of the WebhookSignatureGatewayInterface using the Wallee SDK.
+ * Implementation of the WebhookSignatureGatewayInterface using the VRPayment SDK.
  */
 class WebhookSignatureGateway implements WebhookSignatureGatewayInterface
 {

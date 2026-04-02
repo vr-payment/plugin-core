@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace VRPayment\PluginCore\Webhook;
 
+use VRPayment\PluginCore\Render\JsonStringableTrait;
+
 /**
  * Class WebhookListener
  *
@@ -11,6 +13,8 @@ namespace VRPayment\PluginCore\Webhook;
  */
 class WebhookListener
 {
+    use JsonStringableTrait;
+
     /**
      * @param int $id
      * @param string $name
@@ -21,6 +25,7 @@ class WebhookListener
         public readonly int $id,
         public readonly string $name,
         public readonly int $entityId,
-        public readonly array $entityStates
-    ) {}
+        public readonly array $entityStates,
+    ) {
+    }
 }

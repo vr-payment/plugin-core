@@ -10,15 +10,15 @@ use VRPayment\PluginCore\Log\LoggerInterface;
 use VRPayment\PluginCore\PaymentMethod\PaymentMethod;
 use VRPayment\PluginCore\Sdk\SdkProvider;
 use VRPayment\PluginCore\Sdk\SdkV1\PaymentMethodGateway;
-use VRPayment\Sdk\Model\PaymentMethodConfiguration as SdkPaymentMethodConfiguration;
 use VRPayment\Sdk\Model\CreationEntityState;
+use VRPayment\Sdk\Model\PaymentMethodConfiguration as SdkPaymentMethodConfiguration;
 use VRPayment\Sdk\Service\PaymentMethodConfigurationService as SdkPaymentMethodConfigurationService;
 
 class PaymentMethodGatewayTest extends TestCase
 {
     private PaymentMethodGateway $gateway;
-    private MockObject|SdkProvider $sdkProvider;
     private MockObject|LoggerInterface $logger;
+    private MockObject|SdkProvider $sdkProvider;
     private MockObject|SdkPaymentMethodConfigurationService $service;
 
     protected function setUp(): void

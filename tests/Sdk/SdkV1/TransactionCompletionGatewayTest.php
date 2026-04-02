@@ -8,8 +8,8 @@ use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use VRPayment\PluginCore\Sdk\SdkProvider;
 use VRPayment\PluginCore\Sdk\SdkV1\TransactionCompletionGateway;
-use VRPayment\PluginCore\Transaction\Completion\TransactionCompletion;
 use VRPayment\PluginCore\Transaction\Completion\State;
+use VRPayment\PluginCore\Transaction\Completion\TransactionCompletion;
 use VRPayment\Sdk\Model\TransactionCompletion as SdkTransactionCompletion;
 use VRPayment\Sdk\Model\TransactionCompletionState;
 use VRPayment\Sdk\Model\TransactionVoid as SdkTransactionVoid;
@@ -19,9 +19,9 @@ use VRPayment\Sdk\Service\TransactionVoidService as SdkTransactionVoidService;
 
 class TransactionCompletionGatewayTest extends TestCase
 {
+    private MockObject|SdkTransactionCompletionService $completionService;
     private TransactionCompletionGateway $gateway;
     private MockObject|SdkProvider $sdkProvider;
-    private MockObject|SdkTransactionCompletionService $completionService;
     private MockObject|SdkTransactionVoidService $voidService;
 
     protected function setUp(): void

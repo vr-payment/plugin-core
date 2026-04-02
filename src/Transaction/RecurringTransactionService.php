@@ -6,10 +6,6 @@ namespace VRPayment\PluginCore\Transaction;
 
 use VRPayment\PluginCore\Log\LoggerInterface;
 use VRPayment\PluginCore\Token\TokenService;
-use VRPayment\PluginCore\Transaction\Transaction;
-use VRPayment\PluginCore\Transaction\TransactionContext;
-use VRPayment\PluginCore\Transaction\TransactionService;
-
 
 /**
  * Service for handling recurring transactions.
@@ -21,7 +17,8 @@ readonly class RecurringTransactionService
         private RecurringTransactionGatewayInterface $recurringGateway,
         private TokenService $tokenService,
         private LoggerInterface $logger,
-    ) {}
+    ) {
+    }
 
     /**
      * Processes a recurring payment for an existing transaction.
