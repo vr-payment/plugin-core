@@ -5,15 +5,22 @@ declare(strict_types=1);
 namespace VRPayment\PluginCore\Token;
 
 use VRPayment\PluginCore\State\ValidatesStateTransitions;
+use VRPayment\Sdk\Model\CreationEntityState as SdkCreationEntityState;
 
 /**
  * Represents the state of a token.
  *
- * @see VRPayment\Sdk\Model\CreationEntityState
-*/
+ * @see SdkCreationEntityState
+ */
 enum State: string
 {
     use ValidatesStateTransitions;
+
+    case ACTIVE = 'ACTIVE';
+    case CREATE = 'CREATE';
+    case DELETED = 'DELETED';
+    case DELETING = 'DELETING';
+    case INACTIVE = 'INACTIVE';
 
     public static function getTransitionMap(): array
     {
@@ -42,10 +49,4 @@ enum State: string
             ],
         ];
     }
-
-    case ACTIVE = 'ACTIVE';
-    case CREATE = 'CREATE';
-    case DELETED = 'DELETED';
-    case DELETING = 'DELETING';
-    case INACTIVE = 'INACTIVE';
 }

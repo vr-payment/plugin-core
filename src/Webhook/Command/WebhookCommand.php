@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace VRPayment\PluginCore\Webhook\Command;
 
+use VRPayment\PluginCore\Webhook\WebhookContext;
 use VRPayment\PluginCore\Log\LoggerInterface;
 use VRPayment\PluginCore\Webhook\Exception\CommandException;
-use VRPayment\PluginCore\Webhook\WebhookContext;
 
 /**
  * An abstract base class for webhook commands.

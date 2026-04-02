@@ -5,8 +5,8 @@ declare(strict_types=1);
 namespace VRPayment\PluginCore\Tests\Token;
 
 use PHPUnit\Framework\TestCase;
-use VRPayment\PluginCore\Token\State;
 use VRPayment\PluginCore\Token\Token;
+use VRPayment\PluginCore\Token\State;
 
 class TokenTest extends TestCase
 {

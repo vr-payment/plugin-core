@@ -5,8 +5,8 @@ declare(strict_types=1);
 namespace VRPayment\PluginCore\Tests\Transaction;
 
 use PHPUnit\Framework\TestCase;
-use VRPayment\PluginCore\Transaction\State;
 use VRPayment\PluginCore\Transaction\Transaction;
+use VRPayment\PluginCore\Transaction\State;
 
 class TransactionTest extends TestCase
 {

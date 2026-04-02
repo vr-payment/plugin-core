@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace VRPayment\PluginCore\Tests\Sdk\SdkV1;
+namespace VRPayment\PluginCore\Tests\Sdk\SdkV2;
 
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
@@ -11,28 +11,28 @@ use VRPayment\PluginCore\Refund\Refund;
 use VRPayment\PluginCore\Refund\RefundContext;
 use VRPayment\PluginCore\Refund\Type as RefundType;
 use VRPayment\PluginCore\Sdk\SdkProvider;
-use VRPayment\PluginCore\Sdk\SdkV1\RefundGateway;
+use VRPayment\PluginCore\Sdk\SdkV2\RefundGateway;
 use VRPayment\PluginCore\Transaction\Transaction;
 use VRPayment\Sdk\Model\Refund as SdkRefund;
 use VRPayment\Sdk\Model\RefundCreate as SdkRefundCreate;
-use VRPayment\Sdk\Model\RefundState;
-use VRPayment\Sdk\Service\RefundService as SdkRefundService;
+use VRPayment\Sdk\Model\RefundState as SdkRefundState;
+use VRPayment\Sdk\Service\RefundsService as SdkRefundsService;
 
 class RefundGatewayTest extends TestCase
 {
     private RefundGateway $gateway;
-    private MockObject|LoggerInterface $logger;
-    private MockObject|SdkRefundService $refundService;
     private MockObject|SdkProvider $sdkProvider;
+    private MockObject|LoggerInterface $logger;
+    private MockObject|SdkRefundsService $refundService;
 
     protected function setUp(): void
     {
         $this->sdkProvider = $this->createMock(SdkProvider::class);
         $this->logger = $this->createMock(LoggerInterface::class);
-        $this->refundService = $this->createMock(SdkRefundService::class);
+        $this->refundService = $this->createMock(SdkRefundsService::class);
 
         $this->sdkProvider->method('getService')
-            ->with(SdkRefundService::class)
+            ->with(SdkRefundsService::class)
             ->willReturn($this->refundService);
 
         $this->gateway = new RefundGateway($this->sdkProvider, $this->logger);
@@ -47,10 +47,12 @@ class RefundGatewayTest extends TestCase
         $sdkRefund->setId(10);
         $sdkRefund->setAmount(50.0);
         $sdkRefund->setExternalId('ext-1');
-        $sdkRefund->setState(RefundState::SUCCESSFUL);
+        $sdkRefund->setState(SdkRefundState::SUCCESSFUL);
 
+        // V2: getPaymentRefundsSearch($space, filter, limit, offset, order, query)
         $this->refundService->expects($this->once())
-            ->method('search')
+            ->method('getPaymentRefundsSearch')
+            ->with($spaceId, null, null, null, null, "transaction.id:$transactionId")
             ->willReturn([$sdkRefund]);
 
         $results = $this->gateway->findByTransaction($spaceId, $transactionId);
@@ -80,10 +82,11 @@ class RefundGatewayTest extends TestCase
         $sdkRefund->setId(20);
         $sdkRefund->setAmount(10.0);
         $sdkRefund->setExternalId('ext-2');
-        $sdkRefund->setState(RefundState::PENDING);
+        $sdkRefund->setState(SdkRefundState::PENDING);
 
+        // V2: postPaymentRefunds($space, $create)
         $this->refundService->expects($this->once())
-            ->method('refund')
+            ->method('postPaymentRefunds')
             ->with($this->equalTo($spaceId), $this->callback(function (SdkRefundCreate $create) use ($context) {
                 return $create->getTransaction() === $context->transactionId &&
                     $create->getAmount() === $context->amount &&

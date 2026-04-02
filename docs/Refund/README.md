@@ -60,7 +60,7 @@ $context = new RefundContext(
 ```php
 use VRPayment\PluginCore\Refund\RefundService;
 use VRPayment\PluginCore\Refund\RefundContext;
-use VRPayment\PluginCore\Refund\Type;
+use VRPayment\PluginCore\Refund\Type as TypeEnum;
 
 // ... instantiate services ...
 
@@ -68,7 +68,7 @@ $context = new RefundContext(
     transactionId: 123,
     amount: 50.00,
     merchantReference: 'refund-ref-1',
-    type: Type::MERCHANT_INITIATED_ONLINE,
+    type: TypeEnum::MERCHANT_INITIATED_ONLINE,
     lineItems: [] // Optional: For partial specific items
 );
 
