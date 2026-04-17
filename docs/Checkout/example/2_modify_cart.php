@@ -13,7 +13,7 @@ use VRPayment\PluginCore\PaymentMethod\PaymentMethodSorting as PaymentMethodSort
 use VRPayment\PluginCore\Sdk\SdkProvider;
 use VRPayment\PluginCore\Examples\Common\FilePersistence;
 use VRPayment\PluginCore\Examples\Common\TransactionIdLoader;
-use VRPayment\PluginCore\Sdk\SdkV2\TransactionGateway;
+use VRPayment\PluginCore\Sdk\WebServiceAPIV2\TransactionGateway;
 use VRPayment\PluginCore\Settings\Settings;
 use VRPayment\PluginCore\Tax\Tax;
 use VRPayment\PluginCore\Transaction\TransactionContext;

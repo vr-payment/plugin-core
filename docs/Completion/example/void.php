@@ -7,7 +7,7 @@ error_reporting(E_ALL & ~E_DEPRECATED);
 require_once __DIR__ . '/../../examples/Common/bootstrap.php';
 
 use VRPayment\PluginCore\Sdk\SdkProvider;
-use VRPayment\PluginCore\Sdk\SdkV2\TransactionCompletionGateway;
+use VRPayment\PluginCore\Sdk\WebServiceAPIV2\TransactionCompletionGateway;
 use VRPayment\PluginCore\Settings\Settings;
 use VRPayment\PluginCore\Transaction\Completion\TransactionCompletionService;
 use VRPayment\PluginCore\Examples\Common\TransactionIdLoader;

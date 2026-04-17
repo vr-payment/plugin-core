@@ -2,14 +2,14 @@
 
 declare(strict_types=1);
 
-namespace VRPayment\PluginCore\Tests\Sdk\SdkV2;
+namespace VRPayment\PluginCore\Tests\Sdk\WebServiceAPIV2;
 
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use VRPayment\PluginCore\Log\LoggerInterface;
 use VRPayment\PluginCore\Sdk\SdkProvider;
-use VRPayment\PluginCore\Sdk\SdkV2\TransactionGateway;
+use VRPayment\PluginCore\Sdk\WebServiceAPIV2\TransactionGateway;
 use VRPayment\PluginCore\Settings\IntegrationMode as IntegrationModeEnum;
 use VRPayment\PluginCore\Settings\Settings;
 use VRPayment\PluginCore\Transaction\Transaction;

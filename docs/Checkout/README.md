@@ -63,7 +63,7 @@ Inject the necessary dependencies. In a real application, use your Dependency In
 use VRPayment\PluginCore\Transaction\TransactionService;
 use VRPayment\PluginCore\Settings\Settings;
 use VRPayment\PluginCore\Sdk\SdkProvider;
-use VRPayment\PluginCore\Sdk\SdkV2\TransactionGateway;
+use VRPayment\PluginCore\Sdk\WebServiceAPIV2\TransactionGateway;
 // ... other imports
 
 // 1. Setup SDK

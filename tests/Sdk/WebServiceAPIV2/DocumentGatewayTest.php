@@ -2,14 +2,14 @@
 
 declare(strict_types=1);
 
-namespace VRPayment\PluginCore\Tests\Sdk\SdkV2;
+namespace VRPayment\PluginCore\Tests\Sdk\WebServiceAPIV2;
 
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use VRPayment\PluginCore\Document\RenderedDocument;
 use VRPayment\PluginCore\Log\LoggerInterface;
 use VRPayment\PluginCore\Sdk\SdkProvider;
-use VRPayment\PluginCore\Sdk\SdkV2\DocumentGateway;
+use VRPayment\PluginCore\Sdk\WebServiceAPIV2\DocumentGateway;
 use VRPayment\Sdk\Model\RenderedDocument as SdkRenderedDocument;
 use VRPayment\Sdk\Model\TransactionCompletion as SdkTransactionCompletion;
 use VRPayment\Sdk\Model\TransactionInvoice as SdkTransactionInvoice;

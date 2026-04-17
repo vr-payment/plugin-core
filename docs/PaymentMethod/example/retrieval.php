@@ -19,7 +19,7 @@ require_once __DIR__ . '/../../../vendor/autoload.php';
 // These helper classes simulate a typical integration environment.
 
 use VRPayment\PluginCore\Sdk\SdkProvider;
-use VRPayment\PluginCore\Sdk\SdkV2\PaymentMethodGateway;
+use VRPayment\PluginCore\Sdk\WebServiceAPIV2\PaymentMethodGateway;
 use VRPayment\PluginCore\Settings\Settings;
 use VRPayment\PluginCore\Settings\SettingsProviderInterface;
 use VRPayment\PluginCore\Settings\IntegrationMode as IntegrationModeEnum;

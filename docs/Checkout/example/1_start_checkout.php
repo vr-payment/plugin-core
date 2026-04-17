@@ -9,7 +9,7 @@ use VRPayment\PluginCore\Address\Address;
 use VRPayment\PluginCore\LineItem\LineItem;
 use VRPayment\PluginCore\LineItem\LineItemConsistencyService;
 use VRPayment\PluginCore\Sdk\SdkProvider;
-use VRPayment\PluginCore\Sdk\SdkV2\TransactionGateway;
+use VRPayment\PluginCore\Sdk\WebServiceAPIV2\TransactionGateway;
 use VRPayment\PluginCore\Settings\Settings;
 use VRPayment\PluginCore\Tax\Tax;
 use VRPayment\PluginCore\Token\TokenizationMode as TokenizationModeEnum;

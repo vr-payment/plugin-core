@@ -19,8 +19,8 @@ error_reporting(E_ALL & ~E_DEPRECATED);
 require_once __DIR__ . '/../../examples/Common/bootstrap.php';
 
 use VRPayment\PluginCore\Sdk\SdkProvider;
-use VRPayment\PluginCore\Sdk\SdkV2\TransactionGateway;
-use VRPayment\PluginCore\Sdk\SdkV2\RefundGateway;
+use VRPayment\PluginCore\Sdk\WebServiceAPIV2\TransactionGateway;
+use VRPayment\PluginCore\Sdk\WebServiceAPIV2\RefundGateway;
 use VRPayment\PluginCore\Settings\Settings;
 use VRPayment\PluginCore\Transaction\TransactionService;
 use VRPayment\PluginCore\Refund\RefundService;

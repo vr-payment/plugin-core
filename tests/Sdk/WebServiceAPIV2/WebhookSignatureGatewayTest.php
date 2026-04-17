@@ -2,13 +2,13 @@
 
 declare(strict_types=1);
 
-namespace VRPayment\PluginCore\Tests\Sdk\SdkV2;
+namespace VRPayment\PluginCore\Tests\Sdk\WebServiceAPIV2;
 
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use VRPayment\PluginCore\Log\LoggerInterface;
 use VRPayment\PluginCore\Sdk\SdkProvider;
-use VRPayment\PluginCore\Sdk\SdkV2\WebhookSignatureGateway;
+use VRPayment\PluginCore\Sdk\WebServiceAPIV2\WebhookSignatureGateway;
 use VRPayment\Sdk\Service\WebhookEncryptionKeysService as SdkWebhookEncryptionKeysService;
 
 class WebhookSignatureGatewayTest extends TestCase

@@ -28,7 +28,7 @@ The `TransactionCompletionService` requires the `TransactionCompletionGatewayInt
 
 ```php
 use VRPayment\PluginCore\Transaction\Completion\TransactionCompletionService;
-use VRPayment\PluginCore\Sdk\SdkV2\TransactionCompletionGateway;
+use VRPayment\PluginCore\Sdk\WebServiceAPIV2\TransactionCompletionGateway;
 
 // 1. Setup Gateways
 $completionGateway = new TransactionCompletionGateway($sdkProvider);

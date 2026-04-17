@@ -10,7 +10,7 @@ use VRPayment\PluginCore\Examples\Common\FilePersistence;
 use VRPayment\PluginCore\Examples\Common\TransactionIdLoader;
 use VRPayment\PluginCore\LineItem\LineItemConsistencyService;
 use VRPayment\PluginCore\Sdk\SdkProvider;
-use VRPayment\PluginCore\Sdk\SdkV2\TransactionGateway;
+use VRPayment\PluginCore\Sdk\WebServiceAPIV2\TransactionGateway;
 use VRPayment\PluginCore\Settings\Settings;
 use VRPayment\PluginCore\Transaction\TransactionService;
 

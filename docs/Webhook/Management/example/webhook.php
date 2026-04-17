@@ -20,8 +20,8 @@ error_reporting(E_ALL & ~E_DEPRECATED);
 require_once __DIR__ . '/../../../examples/Common/bootstrap.php';
 
 use VRPayment\PluginCore\Sdk\SdkProvider;
-use VRPayment\PluginCore\Sdk\SdkV2\WebhookManagementGateway;
-use VRPayment\PluginCore\Sdk\SdkV2\WebhookSignatureGateway;
+use VRPayment\PluginCore\Sdk\WebServiceAPIV2\WebhookManagementGateway;
+use VRPayment\PluginCore\Sdk\WebServiceAPIV2\WebhookSignatureGateway;
 use VRPayment\PluginCore\Settings\Settings;
 use VRPayment\PluginCore\Webhook\Enum\WebhookListener;
 use VRPayment\PluginCore\Transaction\State as TransactionState;

@@ -40,8 +40,8 @@ $context->tokenizationMode = TokenizationModeEnum::FORCE_CREATION;
  use VRPayment\PluginCore\Transaction\RecurringTransactionService;
  use VRPayment\PluginCore\Transaction\TransactionService;
  use VRPayment\PluginCore\Token\TokenService;
- use VRPayment\PluginCore\Sdk\SdkV2\RecurringTransactionGateway;
- use VRPayment\PluginCore\Sdk\SdkV2\TokenGateway;
+ use VRPayment\PluginCore\Sdk\WebServiceAPIV2\RecurringTransactionGateway;
+ use VRPayment\PluginCore\Sdk\WebServiceAPIV2\TokenGateway;
  
  // 1. Setup Gateways
  $recurringGateway = new RecurringTransactionGateway($sdkProvider, $logger);

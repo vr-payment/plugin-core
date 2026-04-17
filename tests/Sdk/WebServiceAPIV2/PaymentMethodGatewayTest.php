@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace VRPayment\PluginCore\Tests\Sdk\SdkV2;
+namespace VRPayment\PluginCore\Tests\Sdk\WebServiceAPIV2;
 
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
@@ -10,7 +10,7 @@ use VRPayment\PluginCore\Log\LoggerInterface;
 use VRPayment\PluginCore\PaymentMethod\PaymentMethod;
 use VRPayment\PluginCore\Transaction\Exception\TransactionException;
 use VRPayment\PluginCore\Sdk\SdkProvider;
-use VRPayment\PluginCore\Sdk\SdkV2\PaymentMethodGateway;
+use VRPayment\PluginCore\Sdk\WebServiceAPIV2\PaymentMethodGateway;
 use VRPayment\Sdk\Model\PaymentMethodConfiguration as SdkPaymentMethodConfiguration;
 use VRPayment\Sdk\Model\CreationEntityState as SdkCreationEntityState;
 use VRPayment\Sdk\Service\PaymentMethodConfigurationsService as SdkPaymentMethodConfigurationService;
