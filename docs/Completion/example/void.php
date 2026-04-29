@@ -12,7 +12,7 @@ namespace MyPlugin\ExampleVoidImplementation;
  */
 
 use VRPayment\PluginCore\Examples\Common\TransactionIdLoader;
-use VRPayment\PluginCore\Sdk\SdkV1\TransactionCompletionGateway;
+use VRPayment\PluginCore\Sdk\WebServiceAPIV1\TransactionCompletionGateway;
 use VRPayment\PluginCore\Transaction\Completion\TransactionCompletionService;
 
 error_reporting(E_ALL & ~E_DEPRECATED);

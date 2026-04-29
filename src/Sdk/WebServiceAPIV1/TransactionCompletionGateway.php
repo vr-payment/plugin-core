@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace VRPayment\PluginCore\Sdk\SdkV1;
+namespace VRPayment\PluginCore\Sdk\WebServiceAPIV1;
 
 use VRPayment\PluginCore\Sdk\SdkProvider;
 use VRPayment\PluginCore\Transaction\Completion\State as StateEnum;

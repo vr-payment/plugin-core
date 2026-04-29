@@ -13,9 +13,9 @@ namespace MyPlugin\ExampleRecurringImplementation;
 
 use VRPayment\PluginCore\Examples\Common\TransactionIdLoader;
 use VRPayment\PluginCore\LineItem\LineItemConsistencyService;
-use VRPayment\PluginCore\Sdk\SdkV1\RecurringTransactionGateway;
-use VRPayment\PluginCore\Sdk\SdkV1\TokenGateway;
-use VRPayment\PluginCore\Sdk\SdkV1\TransactionGateway;
+use VRPayment\PluginCore\Sdk\WebServiceAPIV1\RecurringTransactionGateway;
+use VRPayment\PluginCore\Sdk\WebServiceAPIV1\TokenGateway;
+use VRPayment\PluginCore\Sdk\WebServiceAPIV1\TransactionGateway;
 use VRPayment\PluginCore\Token\TokenService;
 use VRPayment\PluginCore\Transaction\RecurringTransactionService;
 use VRPayment\PluginCore\Transaction\TransactionService;

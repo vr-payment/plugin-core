@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace VRPayment\PluginCore\Tests\Sdk\SdkV1;
+namespace VRPayment\PluginCore\Tests\Sdk\WebServiceAPIV1;
 
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
@@ -11,7 +11,7 @@ use VRPayment\PluginCore\Refund\Refund;
 use VRPayment\PluginCore\Refund\RefundContext;
 use VRPayment\PluginCore\Refund\Type as RefundType;
 use VRPayment\PluginCore\Sdk\SdkProvider;
-use VRPayment\PluginCore\Sdk\SdkV1\RefundGateway;
+use VRPayment\PluginCore\Sdk\WebServiceAPIV1\RefundGateway;
 use VRPayment\PluginCore\Transaction\Transaction;
 use VRPayment\Sdk\Model\Refund as SdkRefund;
 use VRPayment\Sdk\Model\RefundCreate as SdkRefundCreate;

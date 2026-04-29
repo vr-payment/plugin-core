@@ -8,7 +8,7 @@ use VRPayment\PluginCore\Examples\Common\TransactionIdLoader;
 use VRPayment\PluginCore\LineItem\LineItem;
 use VRPayment\PluginCore\LineItem\LineItemConsistencyService;
 use VRPayment\PluginCore\PaymentMethod\PaymentMethodSorting;
-use VRPayment\PluginCore\Sdk\SdkV1\TransactionGateway;
+use VRPayment\PluginCore\Sdk\WebServiceAPIV1\TransactionGateway;
 use VRPayment\PluginCore\Tax\Tax;
 use VRPayment\PluginCore\Transaction\TransactionContext;
 use VRPayment\PluginCore\Transaction\TransactionService;

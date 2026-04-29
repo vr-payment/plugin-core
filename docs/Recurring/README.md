@@ -25,8 +25,8 @@ If the original transaction does not have a saved token, the service attempts to
  use VRPayment\PluginCore\Transaction\RecurringTransactionService;
  use VRPayment\PluginCore\Transaction\TransactionService;
  use VRPayment\PluginCore\Token\TokenService;
- use VRPayment\PluginCore\Sdk\SdkV1\RecurringTransactionGateway;
- use VRPayment\PluginCore\Sdk\SdkV1\TokenGateway;
+ use VRPayment\PluginCore\Sdk\WebServiceAPIV1\RecurringTransactionGateway;
+ use VRPayment\PluginCore\Sdk\WebServiceAPIV1\TokenGateway;
  
  // 1. Setup Gateways
  $recurringGateway = new RecurringTransactionGateway($sdkProvider, $logger);

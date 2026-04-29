@@ -5,7 +5,7 @@ namespace MyPlugin\ExampleCheckoutImplementation;
 use VRPayment\PluginCore\Examples\Common\FilePersistence;
 use VRPayment\PluginCore\Examples\Common\TransactionIdLoader;
 use VRPayment\PluginCore\LineItem\LineItemConsistencyService;
-use VRPayment\PluginCore\Sdk\SdkV1\TransactionGateway;
+use VRPayment\PluginCore\Sdk\WebServiceAPIV1\TransactionGateway;
 use VRPayment\PluginCore\Transaction\TransactionService;
 
 error_reporting(E_ALL & ~E_DEPRECATED);

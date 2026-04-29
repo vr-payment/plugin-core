@@ -2,12 +2,12 @@
 
 declare(strict_types=1);
 
-namespace VRPayment\PluginCore\Tests\Sdk\SdkV1;
+namespace VRPayment\PluginCore\Tests\Sdk\WebServiceAPIV1;
 
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use VRPayment\PluginCore\Sdk\SdkProvider;
-use VRPayment\PluginCore\Sdk\SdkV1\TransactionCompletionGateway;
+use VRPayment\PluginCore\Sdk\WebServiceAPIV1\TransactionCompletionGateway;
 use VRPayment\PluginCore\Transaction\Completion\State;
 use VRPayment\PluginCore\Transaction\Completion\TransactionCompletion;
 use VRPayment\Sdk\Model\TransactionCompletion as SdkTransactionCompletion;

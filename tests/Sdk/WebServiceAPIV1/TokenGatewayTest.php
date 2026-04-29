@@ -2,13 +2,13 @@
 
 declare(strict_types=1);
 
-namespace VRPayment\PluginCore\Tests\Sdk\SdkV1;
+namespace VRPayment\PluginCore\Tests\Sdk\WebServiceAPIV1;
 
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Psr\Log\LoggerInterface;
 use VRPayment\PluginCore\Sdk\SdkProvider;
-use VRPayment\PluginCore\Sdk\SdkV1\TokenGateway;
+use VRPayment\PluginCore\Sdk\WebServiceAPIV1\TokenGateway;
 use VRPayment\PluginCore\Token\Token;
 use VRPayment\Sdk\Model\CreationEntityState;
 use VRPayment\Sdk\Model\Token as SdkToken;

@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace VRPayment\PluginCore\Sdk\SdkV1;
+namespace VRPayment\PluginCore\Sdk\WebServiceAPIV1;
 
 use Psr\Log\LoggerInterface;
 use VRPayment\PluginCore\Sdk\SdkProvider;

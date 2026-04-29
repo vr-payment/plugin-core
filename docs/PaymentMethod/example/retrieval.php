@@ -20,7 +20,7 @@ require_once __DIR__ . '/../../../vendor/autoload.php';
 
 
 use VRPayment\PluginCore\Sdk\SdkProvider;
-use VRPayment\PluginCore\Sdk\SdkV1\PaymentMethodGateway;
+use VRPayment\PluginCore\Sdk\WebServiceAPIV1\PaymentMethodGateway;
 use VRPayment\PluginCore\Settings\Settings;
 use VRPayment\PluginCore\Settings\SettingsProviderInterface;
 use VRPayment\PluginCore\Settings\IntegrationMode;

@@ -16,8 +16,8 @@ namespace MyPlugin\ExampleWebhookImplementation;
  * php webhook.php
  */
 
-use VRPayment\PluginCore\Sdk\SdkV1\WebhookManagementGateway;
-use VRPayment\PluginCore\Sdk\SdkV1\WebhookSignatureGateway;
+use VRPayment\PluginCore\Sdk\WebServiceAPIV1\WebhookManagementGateway;
+use VRPayment\PluginCore\Sdk\WebServiceAPIV1\WebhookSignatureGateway;
 use VRPayment\PluginCore\Transaction\State as TransactionState;
 use VRPayment\PluginCore\Webhook\Enum\WebhookListener;
 use VRPayment\PluginCore\Webhook\WebhookConfig;

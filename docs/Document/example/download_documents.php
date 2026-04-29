@@ -18,9 +18,9 @@ use VRPayment\PluginCore\Document\DocumentService;
 use VRPayment\PluginCore\Examples\Common\TransactionIdLoader;
 use VRPayment\PluginCore\LineItem\LineItemConsistencyService;
 use VRPayment\PluginCore\Refund\RefundService;
-use VRPayment\PluginCore\Sdk\SdkV1\DocumentGateway;
-use VRPayment\PluginCore\Sdk\SdkV1\RefundGateway;
-use VRPayment\PluginCore\Sdk\SdkV1\TransactionGateway;
+use VRPayment\PluginCore\Sdk\WebServiceAPIV1\DocumentGateway;
+use VRPayment\PluginCore\Sdk\WebServiceAPIV1\RefundGateway;
+use VRPayment\PluginCore\Sdk\WebServiceAPIV1\TransactionGateway;
 use VRPayment\PluginCore\Transaction\TransactionService;
 
 error_reporting(E_ALL & ~E_DEPRECATED);
