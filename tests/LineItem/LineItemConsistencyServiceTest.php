@@ -8,7 +8,7 @@ use PHPUnit\Framework\TestCase;
 use VRPayment\PluginCore\LineItem\Exception\LineItemConsistencyException;
 use VRPayment\PluginCore\LineItem\LineItem;
 use VRPayment\PluginCore\LineItem\LineItemConsistencyService;
-use VRPayment\PluginCore\LineItem\RoundingStrategy as RoundingStrategyEnum;
+use VRPayment\PluginCore\LineItem\RoundingStrategy;
 use VRPayment\PluginCore\Log\LoggerInterface;
 use VRPayment\PluginCore\Settings\Settings;
 use VRPayment\PluginCore\Settings\SettingsProviderInterface;
@@ -17,7 +17,7 @@ class LineItemConsistencyServiceTest extends TestCase
 {
     private function createService(
         bool $enabled = true,
-        RoundingStrategyEnum $strategy = RoundingStrategyEnum::BY_LINE_ITEM,
+        RoundingStrategy $strategy = RoundingStrategy::BY_LINE_ITEM,
     ): LineItemConsistencyService {
         $provider = $this->createMock(SettingsProviderInterface::class);
         $provider->method('getLineItemConsistencyEnabled')->willReturn($enabled);

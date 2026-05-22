@@ -6,8 +6,9 @@ namespace VRPayment\PluginCore\Transaction;
 
 use VRPayment\PluginCore\Address\Address;
 use VRPayment\PluginCore\LineItem\LineItem;
-use VRPayment\PluginCore\Token\Token;
+use VRPayment\PluginCore\Localization\LocalizedString;
 use VRPayment\PluginCore\Render\JsonStringableTrait;
+use VRPayment\PluginCore\Token\Token;
 
 /**
  * Domain object representing a Transaction.
@@ -67,14 +68,14 @@ class Transaction
     public array $lineItems = [];
 
     /**
-     * @var string|null The failure reason description.
+     * @var LocalizedString|null The localized failure reason from the API.
      */
-    public ?string $failureReason = null;
+    public ?LocalizedString $failureReason = null;
 
     /**
-     * @var string|null The user-facing failure message.
+     * @var LocalizedString|null The localized user-facing failure message.
      */
-    public ?string $userFailureMessage = null;
+    public ?LocalizedString $userFailureMessage = null;
 
 
 

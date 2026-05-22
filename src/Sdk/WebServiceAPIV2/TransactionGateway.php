@@ -6,20 +6,22 @@ namespace VRPayment\PluginCore\Sdk\WebServiceAPIV2;
 
 use VRPayment\PluginCore\Address\Address;
 use VRPayment\PluginCore\LineItem\LineItem;
+use VRPayment\PluginCore\Localization\LocalizedString;
 use VRPayment\PluginCore\Log\LoggerInterface;
 use VRPayment\PluginCore\PaymentMethod\PaymentMethod;
+use VRPayment\PluginCore\PaymentMethod\State as PaymentMethodState;
 use VRPayment\PluginCore\Sdk\SdkProvider;
 use VRPayment\PluginCore\Settings\IntegrationMode as IntegrationModeEnum;
 use VRPayment\PluginCore\Settings\Settings;
 use VRPayment\PluginCore\Tax\Tax;
 use VRPayment\PluginCore\Token\State as TokenState;
 use VRPayment\PluginCore\Token\Token;
+use VRPayment\PluginCore\Transaction\Exception\TransactionException;
 use VRPayment\PluginCore\Transaction\State as StateEnum;
 use VRPayment\PluginCore\Transaction\Transaction;
 use VRPayment\PluginCore\Transaction\TransactionContext;
 use VRPayment\PluginCore\Transaction\TransactionGatewayInterface;
 use VRPayment\PluginCore\Transaction\TransactionSearchCriteria;
-use VRPayment\PluginCore\Transaction\Exception\TransactionException;
 use VRPayment\Sdk\Model\Address as SdkAddress;
 use VRPayment\Sdk\Model\AddressCreate as SdkAddressCreate;
 use VRPayment\Sdk\Model\CreationEntityState as SdkCreationEntityState;
@@ -301,11 +303,9 @@ class TransactionGateway implements TransactionGatewayInterface
         return new PaymentMethod(
             id: (int) $sdkPaymentMethodConfiguration->getId(),
             spaceId: (int) $sdkPaymentMethodConfiguration->getLinkedSpaceId(),
-            state: (string) $sdkPaymentMethodConfiguration->getState(),
-            name: $this->resolveLocalization($sdkPaymentMethodConfiguration->getResolvedTitle() ?? $sdkPaymentMethodConfiguration->getName()),
-            title: $sdkPaymentMethodConfiguration->getResolvedTitle() ?? [],
-            description: $this->resolveLocalization($sdkPaymentMethodConfiguration->getResolvedDescription() ?? $sdkPaymentMethodConfiguration->getDescription()),
-            descriptionMap: $sdkPaymentMethodConfiguration->getResolvedDescription() ?? $sdkPaymentMethodConfiguration->getDescription() ?? [],
+            state: PaymentMethodState::from((string) $sdkPaymentMethodConfiguration->getState()),
+            title: new LocalizedString($sdkPaymentMethodConfiguration->getResolvedTitle() ?? $sdkPaymentMethodConfiguration->getName()),
+            description: new LocalizedString($sdkPaymentMethodConfiguration->getResolvedDescription() ?? $sdkPaymentMethodConfiguration->getDescription()),
             sortOrder: (int) $sdkPaymentMethodConfiguration->getSortOrder(),
             imageUrl: $sdkPaymentMethodConfiguration->getResolvedImageUrl(),
         );
@@ -367,15 +367,11 @@ class TransactionGateway implements TransactionGatewayInterface
         $domain->failedOn = $this->toDateTimeImmutable($sdkTransaction->getFailedOn());
         $domain->processingOn = $this->toDateTimeImmutable($sdkTransaction->getProcessingOn());
 
-        $domain->userFailureMessage = $sdkTransaction->getUserFailureMessage();
+        $domain->userFailureMessage = new LocalizedString($sdkTransaction->getUserFailureMessage());
 
         $reason = $sdkTransaction->getFailureReason();
         if ($reason !== null) {
-            $lang = $sdkTransaction->getLanguage();
-            $d = $reason->getDescription() ?? [];
-            $n = $reason->getName() ?? [];
-
-            $domain->failureReason = $d[$lang] ?? $d['en-US'] ?? reset($d) ?: $n[$lang] ?? $n['en-US'] ?? reset($n) ?: null;
+            $domain->failureReason = new LocalizedString($reason->getDescription() ?? $reason->getName());
         }
 
         if ($sdkTransaction->getToken()) {
@@ -391,18 +387,6 @@ class TransactionGateway implements TransactionGatewayInterface
         }
 
         return $domain;
-    }
-
-    /**
-     * @param array<string, string>|string|null $input
-     */
-    private function resolveLocalization(array|string|null $input): ?string
-    {
-        if (!is_array($input)) {
-            return $input;
-        }
-
-        return $input['en-US'] ?? $input['en-GB'] ?? reset($input) ?: null;
     }
 
     public function search(int $spaceId, TransactionSearchCriteria $criteria): array

@@ -12,6 +12,8 @@ namespace VRPayment\PluginCore\Render;
  */
 readonly class PaymentIntegrationData
 {
+    use JsonStringableTrait;
+
     /**
      * Initializes a new instance of the PaymentIntegrationData class.
      *
