@@ -4,11 +4,15 @@ declare(strict_types=1);
 
 namespace VRPayment\PluginCore\Sdk\WebServiceAPIV1;
 
+use VRPayment\PluginCore\Localization\LocalizedString;
 use VRPayment\PluginCore\Log\LoggerInterface;
+use VRPayment\PluginCore\Refund\Exception\RefundException;
 use VRPayment\PluginCore\Refund\Refund;
 use VRPayment\PluginCore\Refund\RefundContext;
 use VRPayment\PluginCore\Refund\RefundGatewayInterface;
 use VRPayment\PluginCore\Refund\State as StateEnum;
+use VRPayment\PluginCore\Sdk\DateTimeMapperTrait;
+use VRPayment\PluginCore\Sdk\FailureReasonMapperTrait;
 use VRPayment\PluginCore\Sdk\SdkProvider;
 use VRPayment\Sdk\Model\CriteriaOperator as SdkCriteriaOperator;
 use VRPayment\Sdk\Model\EntityQuery as SdkEntityQuery;
@@ -22,6 +26,9 @@ use VRPayment\Sdk\Service\RefundService as SdkRefundService;
 
 class RefundGateway implements RefundGatewayInterface
 {
+    use DateTimeMapperTrait;
+    use FailureReasonMapperTrait;
+
     private SdkRefundService $sdkRefundService;
 
     public function __construct(
@@ -52,8 +59,21 @@ class RefundGateway implements RefundGatewayInterface
             }
             return $refunds;
         } catch (\Throwable $e) {
-            $this->logger->error("Failed to find refunds for Transaction $transactionId: {$e->getMessage()}");
-            return [];
+            $this->logger->error(
+                'Failed to find refunds for transaction: {errorMessage}',
+                [
+                    'errorMessage' => $e->getMessage(),
+                    'exception' => $e,
+                    'spaceId' => $spaceId,
+                    'transactionId' => $transactionId,
+                ],
+            );
+            throw new RefundException(
+                "Failed to find refunds for transaction {$transactionId}: " . $e->getMessage(),
+                new LocalizedString($e->getMessage()),
+                0,
+                $e,
+            );
         }
     }
 
@@ -74,6 +94,14 @@ class RefundGateway implements RefundGatewayInterface
             'SUCCESSFUL' => StateEnum::SUCCESSFUL,
             default => StateEnum::PENDING, // Safe fallback
         };
+
+        $reason = $sdkRefund->getFailureReason();
+        if ($reason !== null) {
+            $refund->failureReason = $this->mapSdkFailureReason($reason);
+        }
+
+        $refund->createdOn = $this->toDateTimeImmutable($sdkRefund->getCreatedOn());
+        $refund->failedOn = $this->toDateTimeImmutable($sdkRefund->getFailedOn());
 
         return $refund;
     }
@@ -131,7 +159,13 @@ class RefundGateway implements RefundGatewayInterface
             $this->logger->error("Refund failed for Transaction {$context->transactionId}: {$e->getMessage()}", [
                 'trace' => $e->getTraceAsString(),
             ]);
-            throw $e;
+            throw new RefundException(
+                "Unable to process refund: {$e->getMessage()}",
+                new LocalizedString($e->getMessage()),
+                0,
+                $e,
+            );
         }
     }
+
 }

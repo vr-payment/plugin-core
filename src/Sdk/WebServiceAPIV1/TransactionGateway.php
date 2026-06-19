@@ -12,17 +12,15 @@ use VRPayment\PluginCore\PaymentMethod\PaymentMethod;
 use VRPayment\PluginCore\PaymentMethod\State as PaymentMethodState;
 use VRPayment\PluginCore\PaymentMethodConfiguration\PaymentMethodConfiguration;
 use VRPayment\PluginCore\Sdk\SdkProvider;
+use VRPayment\PluginCore\Sdk\TransactionMapperTrait;
 use VRPayment\PluginCore\Settings\IntegrationMode as IntegrationModeEnum;
 use VRPayment\PluginCore\Settings\Settings;
 use VRPayment\PluginCore\Tax\Tax;
-use VRPayment\PluginCore\Token\State as TokenState;
-use VRPayment\PluginCore\Token\Token;
-use VRPayment\PluginCore\Transaction\State as StateEnum;
 use VRPayment\PluginCore\Transaction\Transaction;
 use VRPayment\PluginCore\Transaction\TransactionContext;
 use VRPayment\PluginCore\Transaction\TransactionGatewayInterface;
 use VRPayment\PluginCore\Transaction\TransactionSearchCriteria;
-use VRPayment\Sdk\Model\Address as SdkAddress;
+use VRPayment\Sdk\ApiException;
 use VRPayment\Sdk\Model\AddressCreate as SdkAddressCreate;
 use VRPayment\Sdk\Model\CreationEntityState as SdkCreationEntityState;
 use VRPayment\Sdk\Model\CriteriaOperator as SdkCriteriaOperator;
@@ -31,13 +29,10 @@ use VRPayment\Sdk\Model\EntityQueryFilter as SdkEntityQueryFilter;
 use VRPayment\Sdk\Model\EntityQueryFilterType as SdkEntityQueryFilterType;
 use VRPayment\Sdk\Model\EntityQueryOrderBy as SdkEntityQueryOrderBy;
 use VRPayment\Sdk\Model\EntityQueryOrderByType as SdkEntityQueryOrderByType;
-use VRPayment\Sdk\Model\LineItem as SdkLineItem;
 use VRPayment\Sdk\Model\LineItemCreate as SdkLineItemCreate;
 use VRPayment\Sdk\Model\LineItemType as SdkLineItemType;
 use VRPayment\Sdk\Model\PaymentMethodConfiguration as SdkPaymentMethodConfiguration;
 use VRPayment\Sdk\Model\TaxCreate as SdkTaxCreate;
-use VRPayment\Sdk\Model\Token as SdkToken;
-use VRPayment\Sdk\Model\Transaction as SdkTransaction;
 use VRPayment\Sdk\Model\TransactionCreate as SdkTransactionCreate;
 use VRPayment\Sdk\Model\TransactionPending as SdkTransactionPending;
 use VRPayment\Sdk\Service\PaymentMethodConfigurationService as SdkPaymentMethodConfigurationService;
@@ -48,6 +43,8 @@ use VRPayment\Sdk\Service\TransactionService as SdkTransactionService;
 
 class TransactionGateway implements TransactionGatewayInterface
 {
+    use TransactionMapperTrait;
+
     private SdkPaymentMethodConfigurationService $paymentMethodConfigService;
     private SdkTransactionService $transactionService;
 
@@ -138,8 +135,27 @@ class TransactionGateway implements TransactionGatewayInterface
             $sdkTransaction = $this->transactionService->read($spaceId, $transactionId);
             return $this->mapToTransaction($sdkTransaction);
         } catch (\Exception $e) {
-            $this->logger->debug("Gateway: Transaction $transactionId not found in Space $spaceId.");
-            return null;
+            if ($e instanceof ApiException && $e->getCode() === 404) {
+                $this->logger->debug(
+                    'Gateway: Transaction {transactionId} not found in Space {spaceId}.',
+                    [
+                        'spaceId' => $spaceId,
+                        'transactionId' => $transactionId,
+                    ],
+                );
+                return null;
+            }
+
+            $this->logger->error(
+                'Gateway: Failed to find transaction: {errorMessage}',
+                [
+                    'errorMessage' => $e->getMessage(),
+                    'exception' => $e,
+                    'spaceId' => $spaceId,
+                    'transactionId' => $transactionId,
+                ],
+            );
+            throw $e;
         }
     }
 
@@ -312,56 +328,6 @@ class TransactionGateway implements TransactionGatewayInterface
     }
 
     /**
-     * Maps an SDK Address to a domain Address.
-     *
-     * @param SdkAddress $sdkAddress
-     * @return Address
-     */
-    private function mapToAddress(SdkAddress $sdkAddress): Address
-    {
-        $address = new Address();
-        $address->city = $sdkAddress->getCity();
-        $address->country = $sdkAddress->getCountry();
-        $address->familyName = $sdkAddress->getFamilyName();
-        $address->givenName = $sdkAddress->getGivenName();
-        $address->organizationName = $sdkAddress->getOrganizationName();
-        $address->phoneNumber = $sdkAddress->getPhoneNumber();
-        $address->postcode = $sdkAddress->getPostcode();
-        $address->street = $sdkAddress->getStreet();
-        $address->emailAddress = $sdkAddress->getEmailAddress();
-        $address->salutation = $sdkAddress->getSalutation();
-        $address->dateOfBirth = $this->toDateTimeImmutable($sdkAddress->getDateOfBirth());
-        $address->salesTaxNumber = $sdkAddress->getSalesTaxNumber();
-        return $address;
-    }
-
-    /**
-     * Maps an SDK LineItem to a Domain LineItem.
-     *
-     * @param SdkLineItem $sdkItem
-     * @return LineItem
-     */
-    private function mapToLineItem(SdkLineItem $sdkItem): LineItem
-    {
-        $item = new LineItem();
-        $item->uniqueId = $sdkItem->getUniqueId();
-        $item->sku = $sdkItem->getSku();
-        $item->name = $sdkItem->getName();
-        $item->quantity = $sdkItem->getQuantity();
-        $item->amountIncludingTax = $sdkItem->getAmountIncludingTax();
-        $item->type = match ($sdkItem->getType()) {
-            SdkLineItemType::DISCOUNT => LineItem::TYPE_DISCOUNT,
-            SdkLineItemType::SHIPPING => LineItem::TYPE_SHIPPING,
-            SdkLineItemType::FEE => LineItem::TYPE_FEE,
-            default => LineItem::TYPE_PRODUCT,
-        };
-        // Attributes and taxes could be mapped but are not strictly required for current validation needs.
-        // If needed, can be added later.
-
-        return $item;
-    }
-
-    /**
      * Maps an SDK PaymentMethodConfiguration to a domain object.
      *
      * @param SdkPaymentMethodConfiguration $sdkPaymentMethodConfiguration The SDK object.
@@ -379,102 +345,6 @@ class TransactionGateway implements TransactionGatewayInterface
             imageUrl: $sdkPaymentMethodConfiguration->getResolvedImageUrl(),
         );
     }
-
-    /**
-     * Maps an SDK Token to a domain Token.
-     *
-     * @param SdkToken $sdkToken
-     * @return Token
-     */
-    private function mapToToken(SdkToken $sdkToken): Token
-    {
-        $token = new Token();
-        $token->id = $sdkToken->getId();
-        $token->spaceId = $sdkToken->getLinkedSpaceId();
-        $token->version = $sdkToken->getVersion();
-
-        $token->state = match ((string) $sdkToken->getState()) {
-            'ACTIVE' => TokenState::ACTIVE,
-            'CREATE' => TokenState::CREATE,
-            'DELETED' => TokenState::DELETED,
-            'DELETING' => TokenState::DELETING,
-            'INACTIVE' => TokenState::INACTIVE,
-            default => TokenState::ACTIVE,
-        };
-
-        return $token;
-    }
-
-    /**
-     * Maps an SDK Transaction to a domain Transaction.
-     *
-     * @param SdkTransaction $sdkTransaction The SDK transaction.
-     * @return Transaction The domain transaction.
-     */
-    private function mapToTransaction(SdkTransaction $sdkTransaction): Transaction
-    {
-        $domain = new Transaction();
-        $domain->id = $sdkTransaction->getId();
-        $domain->spaceId = $sdkTransaction->getLinkedSpaceId();
-        $domain->version = $sdkTransaction->getVersion();
-
-        $domain->state = match ((string) $sdkTransaction->getState()) {
-            'PENDING' => StateEnum::PENDING,
-            'CONFIRMED' => StateEnum::CONFIRMED,
-            'PROCESSING' => StateEnum::PROCESSING,
-            'FAILED' => StateEnum::FAILED,
-            'AUTHORIZED' => StateEnum::AUTHORIZED,
-            'VOIDED' => StateEnum::VOIDED,
-            'COMPLETED' => StateEnum::COMPLETED,
-            'FULFILL' => StateEnum::FULFILL,
-            'DECLINE' => StateEnum::DECLINE,
-            default => StateEnum::PENDING,
-        };
-
-        $domain->merchantReference = $sdkTransaction->getMerchantReference();
-        $domain->customerId = $sdkTransaction->getCustomerId();
-        $domain->currency = $sdkTransaction->getCurrency();
-
-        $domain->authorizedAmount = $sdkTransaction->getAuthorizationAmount();
-        $domain->refundedAmount = $sdkTransaction->getRefundedAmount();
-
-        if ($sdkTransaction->getLineItems()) {
-            $domain->lineItems = array_map([$this, 'mapToLineItem'], $sdkTransaction->getLineItems());
-        }
-
-        $domain->createdOn = $this->toDateTimeImmutable($sdkTransaction->getCreatedOn());
-        $domain->authorizedOn = $this->toDateTimeImmutable($sdkTransaction->getAuthorizedOn());
-        $domain->completedOn = $this->toDateTimeImmutable($sdkTransaction->getCompletedOn());
-        $domain->failedOn = $this->toDateTimeImmutable($sdkTransaction->getFailedOn());
-        $domain->processingOn = $this->toDateTimeImmutable($sdkTransaction->getProcessingOn());
-
-        $domain->userFailureMessage = new LocalizedString($sdkTransaction->getUserFailureMessage());
-
-        // The VO takes ownership of locale resolution, replacing the previous nested ternary chain.
-        // We prefer the description map; if absent, fall back to the name map.
-        if ($sdkTransaction->getFailureReason()) {
-            $domain->failureReason = new LocalizedString(
-                $sdkTransaction->getFailureReason()->getDescription()
-                ?? $sdkTransaction->getFailureReason()->getName(),
-            );
-        }
-
-        if ($sdkTransaction->getToken()) {
-            $domain->token = $this->mapToToken($sdkTransaction->getToken());
-        }
-
-        if ($sdkTransaction->getBillingAddress()) {
-            $domain->billingAddress = $this->mapToAddress($sdkTransaction->getBillingAddress());
-        }
-
-        if ($sdkTransaction->getShippingAddress()) {
-            $domain->shippingAddress = $this->mapToAddress($sdkTransaction->getShippingAddress());
-        }
-
-        return $domain;
-    }
-
-
 
     /**
      * @inheritDoc
@@ -529,17 +399,6 @@ class TransactionGateway implements TransactionGatewayInterface
             $this->logger->error("Gateway: Failed to search transactions.", ['error' => $e->getMessage()]);
             throw $e;
         }
-    }
-
-    /**
-     * Helper to convert mutable DateTime to Immutable.
-     */
-    private function toDateTimeImmutable(?\DateTime $date): ?\DateTimeImmutable
-    {
-        if (!$date) {
-            return null;
-        }
-        return \DateTimeImmutable::createFromMutable($date);
     }
 
     /**

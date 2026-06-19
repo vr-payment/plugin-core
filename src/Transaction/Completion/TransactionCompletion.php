@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace VRPayment\PluginCore\Transaction\Completion;
 
 use VRPayment\PluginCore\LineItem\LineItem;
+use VRPayment\PluginCore\Localization\LocalizedString;
 use VRPayment\PluginCore\Render\JsonStringableTrait;
 
 /**
@@ -15,6 +16,11 @@ use VRPayment\PluginCore\Render\JsonStringableTrait;
 class TransactionCompletion
 {
     use JsonStringableTrait;
+
+    /**
+     * @var LocalizedString|null The localized failure reason from the API.
+     */
+    public ?LocalizedString $failureReason = null;
 
     /**
      * @var int The completion ID.
