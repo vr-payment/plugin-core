@@ -6,6 +6,7 @@ namespace VRPayment\PluginCore\Sdk\WebServiceAPIV2;
 
 use VRPayment\PluginCore\Log\LoggerInterface;
 use VRPayment\PluginCore\Sdk\SdkProvider;
+use VRPayment\PluginCore\Webhook\Exception\WebhookSignatureValidationException;
 use VRPayment\PluginCore\Webhook\WebhookSignatureGatewayInterface;
 use VRPayment\Sdk\Service\WebhookEncryptionKeysService as SdkWebhookEncryptionKeysService;
 
@@ -16,6 +17,9 @@ use VRPayment\Sdk\Service\WebhookEncryptionKeysService as SdkWebhookEncryptionKe
  */
 class WebhookSignatureGateway implements WebhookSignatureGatewayInterface
 {
+    /**
+     * @var SdkWebhookEncryptionKeysService
+     */
     private SdkWebhookEncryptionKeysService $webhookEncryptionKeysService;
 
     /**
@@ -32,15 +36,32 @@ class WebhookSignatureGateway implements WebhookSignatureGatewayInterface
     }
 
     /**
-     * @inheritDoc
+     * Validates the payload signature.
+     *
+     * @param string $signatureHeader The signature string from the request headers.
+     * @param string $payload The raw request body content.
+     * @return bool True if the signature is valid, false otherwise.
+     * @throws WebhookSignatureValidationException If signature validation fails due to key/API errors.
      */
     public function validate(string $signatureHeader, string $payload): bool
     {
         try {
-            return $this->webhookEncryptionKeysService->isContentValid($signatureHeader, $payload);
+            return (bool)$this->webhookEncryptionKeysService->isContentValid($signatureHeader, $payload);
         } catch (\Exception $e) {
-            $this->logger->warning("Webhook signature validation failed: " . $e->getMessage());
-            return false;
+            // TODO: Include spaceId and transactionId in log context when available
+            $this->logger->error(
+                'Webhook signature validation failed: {errorMessage}',
+                [
+                    'errorMessage' => $e->getMessage(),
+                    'exception' => $e,
+                ],
+            );
+            throw new WebhookSignatureValidationException(
+                "Webhook signature validation failed: " . $e->getMessage(),
+                null,
+                0,
+                $e,
+            );
         }
     }
 }

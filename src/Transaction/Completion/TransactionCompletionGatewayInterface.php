@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace VRPayment\PluginCore\Transaction\Completion;
 
+use VRPayment\PluginCore\Transaction\Void\TransactionVoid;
+
 /**
  * Gateway interface for transaction completion operations.
  *
@@ -25,7 +27,10 @@ interface TransactionCompletionGatewayInterface
      *
      * @param int $spaceId The space ID.
      * @param int $transactionId The transaction ID to void.
-     * @return string The state of the void operation.
+     * @return TransactionVoid The resulting void domain object.
      */
-    public function void(int $spaceId, int $transactionId): string;
+    public function void(
+        int $spaceId,
+        int $transactionId,
+    ): TransactionVoid;
 }

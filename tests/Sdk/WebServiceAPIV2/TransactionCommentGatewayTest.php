@@ -9,15 +9,16 @@ use PHPUnit\Framework\TestCase;
 use VRPayment\PluginCore\Log\LoggerInterface;
 use VRPayment\PluginCore\Sdk\SdkProvider;
 use VRPayment\PluginCore\Sdk\WebServiceAPIV2\TransactionCommentGateway;
-use VRPayment\Sdk\Service\TransactionCommentsService as SdkTransactionCommentsService;
+use VRPayment\PluginCore\Transaction\Exception\TransactionCommentException;
 use VRPayment\Sdk\Model\TransactionComment as SdkTransactionComment;
+use VRPayment\Sdk\Service\TransactionCommentsService as SdkTransactionCommentsService;
 
 class TransactionCommentGatewayTest extends TestCase
 {
     private TransactionCommentGateway $gateway;
+    private MockObject|LoggerInterface $logger;
     private MockObject|SdkProvider $sdkProvider;
     private MockObject|SdkTransactionCommentsService $sdkReferenceService;
-    private MockObject|LoggerInterface $logger;
 
     protected function setUp(): void
     {
@@ -61,15 +62,14 @@ class TransactionCommentGatewayTest extends TestCase
         $this->assertEquals($now->getTimestamp(), $comments[0]->createdOn->getTimestamp());
     }
 
-    public function testGetCommentsHandlesExceptionGracefully(): void
+    public function testGetCommentsThrowsExceptionOnError(): void
     {
         $this->sdkReferenceService->method('getPaymentTransactionsTransactionIdComments')
             ->willThrowException(new \Exception("API Error"));
 
         $this->logger->expects($this->once())->method('error');
 
-        $comments = $this->gateway->getComments(1, 1);
-        $this->assertIsArray($comments);
-        $this->assertEmpty($comments);
+        $this->expectException(TransactionCommentException::class);
+        $this->gateway->getComments(1, 1);
     }
 }
