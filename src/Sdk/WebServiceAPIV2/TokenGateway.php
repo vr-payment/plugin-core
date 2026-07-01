@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace VRPayment\PluginCore\Sdk\WebServiceAPIV2;
 
+use VRPayment\PluginCore\Localization\LocalizedString;
 use VRPayment\PluginCore\Log\LoggerInterface;
 use VRPayment\PluginCore\Sdk\SdkProvider;
 use VRPayment\PluginCore\Sdk\TokenMapperTrait;
@@ -75,6 +76,7 @@ class TokenGateway implements TokenGatewayInterface
                 );
                 throw new MissingTokenException(
                     "Transaction {$transactionId} in Space {$spaceId} has no associated token.",
+                    new LocalizedString('The transaction has no associated token.'),
                 );
             }
 
@@ -92,8 +94,7 @@ class TokenGateway implements TokenGatewayInterface
                 );
                 throw new TokenException(
                     "Failed to fetch token for transaction {$transactionId}: " . $e->getMessage(),
-                    null,
-                    0,
+                    new LocalizedString('Token retrieval failed. Please try again or contact support.'),
                     $e,
                 );
             }
