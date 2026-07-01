@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace VRPayment\PluginCore\Sdk\WebServiceAPIV1;
 
+use VRPayment\PluginCore\Localization\LocalizedString;
 use VRPayment\PluginCore\Log\LoggerInterface;
 use VRPayment\PluginCore\Sdk\SdkProvider;
 use VRPayment\PluginCore\Webhook\Exception\WebhookSignatureValidationException;
@@ -58,8 +59,7 @@ class WebhookSignatureGateway implements WebhookSignatureGatewayInterface
             );
             throw new WebhookSignatureValidationException(
                 "Webhook signature validation failed: " . $e->getMessage(),
-                null,
-                0,
+                new LocalizedString("Webhook signature validation failed."),
                 $e,
             );
         }

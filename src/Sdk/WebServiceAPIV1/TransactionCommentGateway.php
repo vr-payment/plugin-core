@@ -10,6 +10,7 @@ use VRPayment\PluginCore\Sdk\DateTimeMapperTrait;
 use VRPayment\PluginCore\Sdk\SdkProvider;
 use VRPayment\PluginCore\Transaction\Exception\TransactionCommentException;
 use VRPayment\PluginCore\Transaction\TransactionComment;
+use VRPayment\PluginCore\Transaction\TransactionCommentCollection;
 use VRPayment\PluginCore\Transaction\TransactionCommentGatewayInterface;
 use VRPayment\Sdk\Model\TransactionComment as SdkTransactionComment;
 use VRPayment\Sdk\Service\TransactionCommentService as SdkTransactionCommentService;
@@ -42,7 +43,7 @@ class TransactionCommentGateway implements TransactionCommentGatewayInterface
     /**
      * @inheritDoc
      */
-    public function getComments(int $spaceId, int $transactionId): array
+    public function getComments(int $spaceId, int $transactionId): TransactionCommentCollection
     {
         try {
             $this->logger->debug(
@@ -54,7 +55,7 @@ class TransactionCommentGateway implements TransactionCommentGatewayInterface
             );
             $sdkComments = $this->service->all($spaceId, $transactionId);
 
-            return array_map([$this, 'mapToTransactionComment'], $sdkComments);
+            return new TransactionCommentCollection(...array_map([$this, 'mapToTransactionComment'], $sdkComments));
         } catch (\Exception $e) {
             $this->logger->error(
                 'Failed to fetch transaction comments: {errorMessage}',
@@ -67,8 +68,7 @@ class TransactionCommentGateway implements TransactionCommentGatewayInterface
             );
             throw new TransactionCommentException(
                 "Failed to fetch comments for transaction {$transactionId}: " . $e->getMessage(),
-                new LocalizedString($e->getMessage()),
-                0,
+                new LocalizedString('An error occurred while fetching transaction comments.'),
                 $e,
             );
         }

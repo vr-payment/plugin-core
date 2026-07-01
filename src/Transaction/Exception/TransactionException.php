@@ -4,9 +4,11 @@ declare(strict_types=1);
 
 namespace VRPayment\PluginCore\Transaction\Exception;
 
+use VRPayment\PluginCore\SharedKernel\AbstractDomainException;
+
 /**
  * Thrown when the transaction creation or update process fails at the logical or API level.
  */
-class TransactionException extends \Exception
+class TransactionException extends AbstractDomainException
 {
 }
