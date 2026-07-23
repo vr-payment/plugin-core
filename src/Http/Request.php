@@ -6,7 +6,7 @@ namespace VRPayment\PluginCore\Http;
 
 use Magento\Framework\App\RequestInterface as MagentoRequest;
 use Symfony\Component\HttpFoundation\Request as SymfonyRequest;
-use VRPayment\PluginCore\Render\JsonStringableTrait;
+use VRPayment\PluginCore\SharedKernel\JsonStringableTrait;
 
 class Request
 {

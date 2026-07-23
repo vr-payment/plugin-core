@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace VRPayment\PluginCore\Document;
 
-use VRPayment\PluginCore\Render\JsonStringableTrait;
+use VRPayment\PluginCore\SharedKernel\JsonStringableTrait;
 
 /**
  * Domain entity representing a rendered document (PDF).

@@ -5,6 +5,8 @@ declare(strict_types=1);
 namespace VRPayment\PluginCore\Sdk\WebServiceAPIV1;
 
 use VRPayment\PluginCore\Localization\LocalizedString;
+use VRPayment\PluginCore\Log\DomainLoggerTrait;
+use VRPayment\PluginCore\Log\LogContext;
 use VRPayment\PluginCore\Log\LoggerInterface;
 use VRPayment\PluginCore\Sdk\SdkProvider;
 use VRPayment\PluginCore\Webhook\Exception\WebhookSignatureValidationException;
@@ -16,8 +18,10 @@ use VRPayment\Sdk\Service\WebhookEncryptionService as SdkWebhookEncryptionServic
  *
  * Implementation of the WebhookSignatureGatewayInterface using the VRPayment SDK.
  */
+#[LogContext(domain: 'webhook')]
 class WebhookSignatureGateway implements WebhookSignatureGatewayInterface
 {
+    use DomainLoggerTrait;
     /**
      * @var SdkWebhookEncryptionService
      */
@@ -31,8 +35,9 @@ class WebhookSignatureGateway implements WebhookSignatureGatewayInterface
      */
     public function __construct(
         private readonly SdkProvider $sdkProvider,
-        private readonly LoggerInterface $logger,
+        LoggerInterface $logger,
     ) {
+        $this->initializeLogger($logger);
         $this->webhookEncryptionService = $this->sdkProvider->getService(SdkWebhookEncryptionService::class);
     }
 
@@ -48,7 +53,7 @@ class WebhookSignatureGateway implements WebhookSignatureGatewayInterface
     {
         try {
             return (bool)$this->webhookEncryptionService->isContentValid($signatureHeader, $payload);
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
             // TODO: Include spaceId and transactionId in log context when available
             $this->logger->error(
                 'Webhook signature validation failed: {errorMessage}',

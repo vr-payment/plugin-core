@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace VRPayment\PluginCore\Transaction;
 
-use VRPayment\PluginCore\Render\JsonStringableTrait;
+use VRPayment\PluginCore\SharedKernel\JsonStringableTrait;
 
 /**
  * Data Transfer Object for transaction search criteria.

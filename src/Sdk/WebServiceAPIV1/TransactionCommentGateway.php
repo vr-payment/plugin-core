@@ -5,6 +5,8 @@ declare(strict_types=1);
 namespace VRPayment\PluginCore\Sdk\WebServiceAPIV1;
 
 use VRPayment\PluginCore\Localization\LocalizedString;
+use VRPayment\PluginCore\Log\DomainLoggerTrait;
+use VRPayment\PluginCore\Log\LogContext;
 use VRPayment\PluginCore\Log\LoggerInterface;
 use VRPayment\PluginCore\Sdk\DateTimeMapperTrait;
 use VRPayment\PluginCore\Sdk\SdkProvider;
@@ -18,9 +20,11 @@ use VRPayment\Sdk\Service\TransactionCommentService as SdkTransactionCommentServ
 /**
  * Gateway for retrieving transaction comments.
  */
+#[LogContext(domain: 'transaction')]
 class TransactionCommentGateway implements TransactionCommentGatewayInterface
 {
     use DateTimeMapperTrait;
+    use DomainLoggerTrait;
 
     /**
      * @var SdkTransactionCommentService
@@ -35,8 +39,9 @@ class TransactionCommentGateway implements TransactionCommentGatewayInterface
      */
     public function __construct(
         private readonly SdkProvider $sdkProvider,
-        private readonly LoggerInterface $logger,
+        LoggerInterface $logger,
     ) {
+        $this->initializeLogger($logger);
         $this->service = $this->sdkProvider->getService(SdkTransactionCommentService::class);
     }
 
@@ -56,7 +61,7 @@ class TransactionCommentGateway implements TransactionCommentGatewayInterface
             $sdkComments = $this->service->all($spaceId, $transactionId);
 
             return new TransactionCommentCollection(...array_map([$this, 'mapToTransactionComment'], $sdkComments));
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
             $this->logger->error(
                 'Failed to fetch transaction comments: {errorMessage}',
                 [

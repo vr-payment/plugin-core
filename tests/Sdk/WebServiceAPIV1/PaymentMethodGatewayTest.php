@@ -7,6 +7,7 @@ namespace VRPayment\PluginCore\Tests\Sdk\WebServiceAPIV1;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use VRPayment\PluginCore\Log\LoggerInterface;
+use VRPayment\PluginCore\PaymentMethod\Exception\PaymentMethodException;
 use VRPayment\PluginCore\PaymentMethod\PaymentMethod;
 use VRPayment\PluginCore\PaymentMethod\State;
 use VRPayment\PluginCore\Sdk\SdkProvider;
@@ -69,7 +70,7 @@ class PaymentMethodGatewayTest extends TestCase
 
     public function testFetchByIdThrowsExceptionIfNotFound(): void
     {
-        $this->expectException(\RuntimeException::class);
+        $this->expectException(PaymentMethodException::class);
         $this->expectExceptionMessage('Payment method 10 not found.');
 
         $this->service->expects($this->once())
