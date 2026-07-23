@@ -5,9 +5,11 @@ declare(strict_types=1);
 namespace VRPayment\PluginCore\Transaction;
 
 use VRPayment\PluginCore\Address\Address;
+use VRPayment\PluginCore\Customer\CompanyDetails;
+use VRPayment\PluginCore\Customer\PersonalDetails;
 use VRPayment\PluginCore\LineItem\LineItem;
 use VRPayment\PluginCore\Localization\LocalizedString;
-use VRPayment\PluginCore\Render\JsonStringableTrait;
+use VRPayment\PluginCore\SharedKernel\JsonStringableTrait;
 use VRPayment\PluginCore\Token\Token;
 
 /**
@@ -86,6 +88,16 @@ class Transaction
      * @var Address|null The shipping address.
      */
     public ?Address $shippingAddress = null;
+
+    /**
+     * @var PersonalDetails|null The customer's personal identity data.
+     */
+    public ?PersonalDetails $personalDetails = null;
+
+    /**
+     * @var CompanyDetails|null The customer's corporate identity data.
+     */
+    public ?CompanyDetails $companyDetails = null;
 
     /**
      * @var \DateTimeImmutable|null The date/time when the transaction was created.

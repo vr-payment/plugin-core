@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace VRPayment\PluginCore\Webhook;
 
-use VRPayment\PluginCore\Render\JsonStringableTrait;
+use VRPayment\PluginCore\SharedKernel\JsonStringableTrait;
 
 /**
  * An immutable value object that holds the context of a webhook event.

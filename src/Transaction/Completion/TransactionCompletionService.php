@@ -5,6 +5,8 @@ declare(strict_types=1);
 namespace VRPayment\PluginCore\Transaction\Completion;
 
 use VRPayment\PluginCore\Localization\LocalizedString;
+use VRPayment\PluginCore\Log\DomainLoggerTrait;
+use VRPayment\PluginCore\Log\LogContext;
 use VRPayment\PluginCore\Log\LoggerInterface;
 use VRPayment\PluginCore\Transaction\Exception\TransactionException;
 use VRPayment\PluginCore\Transaction\Void\TransactionVoid;
@@ -12,12 +14,15 @@ use VRPayment\PluginCore\Transaction\Void\TransactionVoid;
 /**
  * Service for handling transaction completions (Capture, Void).
  */
-readonly class TransactionCompletionService
+#[LogContext(domain: 'transaction', subdomain: 'completion')]
+class TransactionCompletionService
 {
+    use DomainLoggerTrait;
     public function __construct(
-        private TransactionCompletionGatewayInterface $completionGateway,
-        private LoggerInterface $logger,
+        private readonly TransactionCompletionGatewayInterface $completionGateway,
+        LoggerInterface $logger,
     ) {
+        $this->initializeLogger($logger);
     }
 
     /**

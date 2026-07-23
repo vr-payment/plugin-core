@@ -5,6 +5,8 @@ declare(strict_types=1);
 namespace VRPayment\PluginCore\Transaction;
 
 use VRPayment\PluginCore\Localization\LocalizedString;
+use VRPayment\PluginCore\Log\DomainLoggerTrait;
+use VRPayment\PluginCore\Log\LogContext;
 use VRPayment\PluginCore\Log\LoggerInterface;
 use VRPayment\PluginCore\Token\Exception\MissingTokenException;
 use VRPayment\PluginCore\Transaction\Exception\TransactionException;
@@ -15,13 +17,16 @@ use VRPayment\PluginCore\Transaction\TransactionService;
 /**
  * Service for handling recurring transactions.
  */
-readonly class RecurringTransactionService
+#[LogContext(domain: 'transaction', subdomain: 'recurring')]
+class RecurringTransactionService
 {
+    use DomainLoggerTrait;
     public function __construct(
-        private TransactionService $transactionService,
-        private RecurringTransactionGatewayInterface $recurringGateway,
-        private LoggerInterface $logger,
+        private readonly TransactionService $transactionService,
+        private readonly RecurringTransactionGatewayInterface $recurringGateway,
+        LoggerInterface $logger,
     ) {
+        $this->initializeLogger($logger);
     }
 
     /**

@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace VRPayment\PluginCore\Transaction\Completion;
 
 use VRPayment\PluginCore\Localization\LocalizedString;
-use VRPayment\PluginCore\Render\JsonStringableTrait;
+use VRPayment\PluginCore\SharedKernel\JsonStringableTrait;
 
 /**
  * Domain object representing a Transaction Completion (capture).

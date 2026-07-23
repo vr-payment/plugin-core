@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace VRPayment\PluginCore\Webhook;
 
-use VRPayment\PluginCore\Render\JsonStringableTrait;
+use VRPayment\PluginCore\SharedKernel\JsonStringableTrait;
 use VRPayment\PluginCore\Webhook\Enum\WebhookListener as WebhookListenerEnum;
 
 /**

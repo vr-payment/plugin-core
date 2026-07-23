@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace VRPayment\PluginCore\PaymentMethod;
 
 use VRPayment\PluginCore\Localization\LocalizedString;
-use VRPayment\PluginCore\Render\JsonStringableTrait;
+use VRPayment\PluginCore\SharedKernel\JsonStringableTrait;
 
 /**
  * Domain entity representing a Payment Method.

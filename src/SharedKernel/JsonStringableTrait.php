@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace VRPayment\PluginCore\Render;
+namespace VRPayment\PluginCore\SharedKernel;
 
 /**
  * Trait JsonStringableTrait

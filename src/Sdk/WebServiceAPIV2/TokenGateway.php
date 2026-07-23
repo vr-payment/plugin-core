@@ -5,6 +5,8 @@ declare(strict_types=1);
 namespace VRPayment\PluginCore\Sdk\WebServiceAPIV2;
 
 use VRPayment\PluginCore\Localization\LocalizedString;
+use VRPayment\PluginCore\Log\DomainLoggerTrait;
+use VRPayment\PluginCore\Log\LogContext;
 use VRPayment\PluginCore\Log\LoggerInterface;
 use VRPayment\PluginCore\Sdk\SdkProvider;
 use VRPayment\PluginCore\Sdk\TokenMapperTrait;
@@ -18,8 +20,10 @@ use VRPayment\Sdk\Service\TransactionsService as SdkTransactionsService;
 /**
  * SDK implementation of the TokenGatewayInterface for API V2.
  */
+#[LogContext(domain: 'transaction', subdomain: 'recurring')]
 class TokenGateway implements TokenGatewayInterface
 {
+    use DomainLoggerTrait;
     use TokenMapperTrait;
 
     /**
@@ -35,8 +39,9 @@ class TokenGateway implements TokenGatewayInterface
      */
     public function __construct(
         private readonly SdkProvider $sdkProvider,
-        private readonly LoggerInterface $logger,
+        LoggerInterface $logger,
     ) {
+        $this->initializeLogger($logger);
         $this->transactionsService = $this->sdkProvider->getService(SdkTransactionsService::class);
     }
 
@@ -81,7 +86,7 @@ class TokenGateway implements TokenGatewayInterface
             }
 
             return $this->mapToToken($sdkToken, $spaceId);
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
             if (!($e instanceof MissingTokenException)) {
                 $this->logger->error(
                     'Failed to fetch token for transaction: {errorMessage}',
