@@ -9,6 +9,8 @@ use VRPayment\PluginCore\Examples\Common\EnvSettingsProvider;
 use VRPayment\PluginCore\Examples\Common\FilePersistence;
 use VRPayment\PluginCore\Examples\Common\TransactionIdLoader;
 
+// 📖 Concept documentation: See docs/examples/Common/README.md
+
 // Load helpers
 require_once __DIR__ . '/SimpleLogger.php';
 require_once __DIR__ . '/EnvSettingsProvider.php';

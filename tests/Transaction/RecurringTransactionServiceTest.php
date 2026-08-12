@@ -13,6 +13,7 @@ use VRPayment\PluginCore\Transaction\Transaction;
 use VRPayment\PluginCore\Transaction\TransactionContext;
 use VRPayment\PluginCore\Transaction\TransactionService;
 use VRPayment\PluginCore\Token\Exception\MissingTokenException;
+use VRPayment\PluginCore\Token\State as TokenState;
 use VRPayment\PluginCore\Token\Token;
 use VRPayment\PluginCore\Address\Address;
 
@@ -48,8 +49,7 @@ class RecurringTransactionServiceTest extends TestCase
         $originalTransaction->customerId = 'CUST-001';
         $originalTransaction->currency = 'USD';
 
-        $token = new Token();
-        $token->id = 555;
+        $token = new Token(id: 555, state: TokenState::ACTIVE);
         $originalTransaction->token = $token;
 
         $address = new Address();

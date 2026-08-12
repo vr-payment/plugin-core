@@ -4,6 +4,8 @@ namespace VRPayment\PluginCore\Examples\Common;
 
 use VRPayment\PluginCore\Log\LoggerInterface;
 
+// 📖 Concept documentation: See docs/examples/Common/README.md
+
 /**
  * A simple logger implementation that outputs to stdout.
  */

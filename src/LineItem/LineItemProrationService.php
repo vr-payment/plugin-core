@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace VRPayment\PluginCore\LineItem;
 
-use VRPayment\PluginCore\Currency\CurrencyRoundingService;
+use VRPayment\PluginCore\GlobalData\Currency\CurrencyRoundingService;
 use VRPayment\PluginCore\Log\DomainLoggerTrait;
 use VRPayment\PluginCore\Log\LogContext;
 use VRPayment\PluginCore\Log\LoggerInterface;
