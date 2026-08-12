@@ -2,6 +2,8 @@
 
 namespace VRPayment\PluginCore\Examples\Common;
 
+// 📖 Concept documentation: See docs/examples/Common/README.md
+
 class TransactionIdLoader
 {
     /**

@@ -5,6 +5,8 @@ namespace VRPayment\PluginCore\Examples\Common;
 use VRPayment\PluginCore\Log\LoggerInterface;
 use Stringable;
 
+// 📖 Concept documentation: See docs/examples/Common/README.md
+
 class SimpleLogger implements \VRPayment\PluginCore\Log\LoggerInterface
 {
     public function emergency(Stringable|string $message, array $context = []): void

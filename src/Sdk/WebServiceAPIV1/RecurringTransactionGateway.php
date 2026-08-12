@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace VRPayment\PluginCore\Sdk\WebServiceAPIV1;
 
-use VRPayment\PluginCore\Localization\LocalizedString;
 use VRPayment\PluginCore\Log\DomainLoggerTrait;
 use VRPayment\PluginCore\Log\LogContext;
 use VRPayment\PluginCore\Log\LoggerInterface;
@@ -74,10 +73,12 @@ class RecurringTransactionGateway implements RecurringTransactionGatewayInterfac
                 'spaceId' => $spaceId,
                 'exception' => $e,
             ]);
-            throw new TransactionException(
-                "Failed to process recurring payment for transaction $transactionId: " . $e->getMessage(),
-                new LocalizedString('The recurring payment could not be processed.'),
+            throw SdkProvider::wrapException(
                 $e,
+                TransactionException::class,
+                'processWithoutUserInteraction',
+                ['spaceId' => $spaceId, 'transactionId' => $transactionId],
+                'The recurring payment could not be processed.',
             );
         }
     }

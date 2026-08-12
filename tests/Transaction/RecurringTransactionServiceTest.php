@@ -9,6 +9,7 @@ use PHPUnit\Framework\TestCase;
 use VRPayment\PluginCore\Address\Address;
 use VRPayment\PluginCore\Log\LoggerInterface;
 use VRPayment\PluginCore\Token\Exception\MissingTokenException;
+use VRPayment\PluginCore\Token\State as TokenState;
 use VRPayment\PluginCore\Token\Token;
 use VRPayment\PluginCore\Transaction\Exception\TransactionException;
 use VRPayment\PluginCore\Transaction\RecurringTransactionGatewayInterface;
@@ -53,8 +54,7 @@ class RecurringTransactionServiceTest extends TestCase
         $originalTransaction->customerId = 'CUST-001';
         $originalTransaction->currency = 'USD';
 
-        $token = new Token();
-        $token->id = 555;
+        $token = new Token(id: 555, state: TokenState::ACTIVE);
         $originalTransaction->token = $token;
 
         $address = new Address();
@@ -106,8 +106,7 @@ class RecurringTransactionServiceTest extends TestCase
         $originalTransaction->id = $transactionId;
         $originalTransaction->spaceId = $spaceId;
 
-        $token = new Token();
-        $token->id = 555;
+        $token = new Token(id: 555, state: TokenState::ACTIVE);
         $originalTransaction->token = $token;
         $originalTransaction->billingAddress = null;
 

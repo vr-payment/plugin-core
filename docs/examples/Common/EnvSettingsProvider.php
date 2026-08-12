@@ -5,6 +5,8 @@ namespace VRPayment\PluginCore\Examples\Common;
 use VRPayment\PluginCore\Settings\DefaultSettingsProvider;
 use VRPayment\PluginCore\Settings\IntegrationMode;
 
+// 📖 Concept documentation: See docs/examples/Common/README.md
+
 class EnvSettingsProvider extends DefaultSettingsProvider
 {
     public function getSpaceId(): ?int

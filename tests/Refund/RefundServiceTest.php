@@ -10,6 +10,7 @@ use VRPayment\PluginCore\LineItem\LineItem;
 use VRPayment\PluginCore\LineItem\LineItemCollection;
 use VRPayment\PluginCore\Log\LoggerInterface;
 use VRPayment\PluginCore\Refund\Exception\InvalidRefundException;
+use VRPayment\PluginCore\Refund\Exception\RefundException;
 use VRPayment\PluginCore\Refund\LineItem\RefundLineItem;
 use VRPayment\PluginCore\Refund\LineItem\RefundLineItemCollection;
 use VRPayment\PluginCore\Refund\Refund;
@@ -40,6 +41,30 @@ class RefundServiceTest extends TestCase
             $this->transactionService,
             $this->logger,
         );
+    }
+
+    public function testFindByIdDelegatesToGatewayAndReturnsRefund(): void
+    {
+        $refund = new Refund();
+        $refund->id = 555;
+        $refund->transactionId = 123;
+
+        $this->gateway->expects($this->once())
+            ->method('findById')
+            ->with(1, 555)
+            ->willReturn($refund);
+
+        $this->assertSame($refund, $this->service->findById(1, 555));
+    }
+
+    public function testFindByIdPropagatesGatewayException(): void
+    {
+        $this->gateway->method('findById')
+            ->willThrowException(new RefundException('boom'));
+
+        $this->expectException(RefundException::class);
+
+        $this->service->findById(1, 555);
     }
 
     public function testGatewayFailure(): void
@@ -416,4 +441,5 @@ class RefundServiceTest extends TestCase
 
         $this->service->createRefund($spaceId, $context);
     }
+
 }

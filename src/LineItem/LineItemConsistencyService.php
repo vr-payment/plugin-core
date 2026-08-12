@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace VRPayment\PluginCore\LineItem;
 
-use VRPayment\PluginCore\Currency\CurrencyRoundingService;
+use VRPayment\PluginCore\GlobalData\Currency\CurrencyRoundingService;
 use VRPayment\PluginCore\LineItem\Exception\LineItemConsistencyException;
 use VRPayment\PluginCore\Localization\LocalizedString;
 use VRPayment\PluginCore\Log\DomainLoggerTrait;
@@ -172,7 +172,7 @@ class LineItemConsistencyService
      * Most payment gateways do not support transactions with a total amount <= 0.
      * This occurs when discounts exceed the value of the products (e.g. combined gift cards).
      * We cap the discounts proportionally to keep the total at exactly zero, allowing
-     * the transaction to be created as "Free" in the portal.
+     * the transaction to be created as "Free" in the VRPayment Portal.
      *
      * @param LineItem[] $lineItems
      * @return LineItemCollection The sanitized list (cloned to avoid side effects).
