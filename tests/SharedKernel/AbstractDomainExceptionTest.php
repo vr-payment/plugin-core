@@ -7,7 +7,7 @@ namespace VRPayment\PluginCore\Tests\SharedKernel;
 use PHPUnit\Framework\TestCase;
 use VRPayment\PluginCore\Refund\Exception\InvalidRefundException;
 use VRPayment\PluginCore\SharedKernel\AbstractDomainException;
-use VRPayment\PluginCore\Webhook\Exception\TransientWebhookException;
+use VRPayment\PluginCore\Webhook\Exception\RetryableWebhookException;
 
 class AbstractDomainExceptionTest extends TestCase
 {
@@ -48,9 +48,9 @@ class AbstractDomainExceptionTest extends TestCase
         $this->assertFalse($exception->isRetryable());
     }
 
-    public function testTransientWebhookExceptionIsRetryableByDefault(): void
+    public function testRetryableWebhookExceptionIsRetryableByDefault(): void
     {
-        $exception = new TransientWebhookException('lock contention');
+        $exception = new RetryableWebhookException('lock contention');
 
         $this->assertTrue($exception->isRetryable());
     }

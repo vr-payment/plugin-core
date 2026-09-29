@@ -17,6 +17,7 @@ use VRPayment\PluginCore\Refund\RefundGatewayInterface;
 use VRPayment\PluginCore\Refund\State as StateEnum;
 use VRPayment\PluginCore\Sdk\DateTimeMapperTrait;
 use VRPayment\PluginCore\Sdk\FailureReasonMapperTrait;
+use VRPayment\PluginCore\Sdk\LabelMapperTrait;
 use VRPayment\PluginCore\Sdk\LineItemMapperTrait;
 use VRPayment\PluginCore\Sdk\SdkProvider;
 use VRPayment\PluginCore\Sdk\SearchPaginationTrait;
@@ -32,6 +33,7 @@ class RefundGateway implements RefundGatewayInterface
     use DomainLoggerTrait;
     use DateTimeMapperTrait;
     use FailureReasonMapperTrait;
+    use LabelMapperTrait;
     use LineItemMapperTrait;
     use SearchPaginationTrait;
 
@@ -58,9 +60,10 @@ class RefundGateway implements RefundGatewayInterface
 
             $sdkRefunds = $this->paginateSearch(
                 function (int $offset) use ($spaceId, $query): object {
+                    // Labels are a related entity this API omits unless expanded.
                     return $this->sdkRefundService->getPaymentRefundsSearch(
                         $spaceId,
-                        null,
+                        ['labels'],
                         SdkProvider::MAX_PAGE_SIZE,
                         $offset,
                         null,
@@ -184,7 +187,8 @@ class RefundGateway implements RefundGatewayInterface
         ]);
 
         try {
-            $sdkRefund = $this->sdkRefundService->getPaymentRefundsId($refundId, $spaceId);
+            // Labels are a related entity this API omits unless expanded.
+            $sdkRefund = $this->sdkRefundService->getPaymentRefundsId($refundId, $spaceId, ['labels']);
             return $this->mapToRefund($sdkRefund, (int)$sdkRefund->getTransaction()?->getId());
         } catch (\Throwable $e) {
             $this->logger->error(
@@ -243,6 +247,8 @@ class RefundGateway implements RefundGatewayInterface
         if (!empty($sdkReducedLineItems)) {
             $refund->reducedLineItems = new LineItemCollection(...array_map([$this, 'mapToLineItem'], $sdkReducedLineItems));
         }
+
+        $refund->labels = $this->mapToLabels($sdkRefund->getLabels());
 
         return $refund;
     }

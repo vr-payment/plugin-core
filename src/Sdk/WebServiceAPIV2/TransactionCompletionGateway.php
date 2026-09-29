@@ -10,6 +10,8 @@ use VRPayment\PluginCore\Log\DomainLoggerTrait;
 use VRPayment\PluginCore\Log\LogContext;
 use VRPayment\PluginCore\Log\LoggerInterface;
 use VRPayment\PluginCore\Sdk\FailureReasonMapperTrait;
+use VRPayment\PluginCore\Sdk\LabelMapperTrait;
+use VRPayment\PluginCore\Sdk\LineItemMapperTrait;
 use VRPayment\PluginCore\Sdk\SdkProvider;
 use VRPayment\PluginCore\Transaction\Completion\CaptureRequest;
 use VRPayment\PluginCore\Transaction\Completion\Exception\CompletionException;
@@ -35,6 +37,8 @@ class TransactionCompletionGateway implements TransactionCompletionGatewayInterf
 {
     use DomainLoggerTrait;
     use FailureReasonMapperTrait;
+    use LabelMapperTrait;
+    use LineItemMapperTrait;
 
     private SdkTransactionsService $transactionsService;
 
@@ -130,8 +134,9 @@ class TransactionCompletionGateway implements TransactionCompletionGatewayInterf
             /** @var SdkTransactionCompletionsService $service */
             $service = $this->sdkProvider->getService(SdkTransactionCompletionsService::class);
 
-            // V2: getPaymentTransactionsCompletionsId($id, $space)
-            $sdkCompletion = $service->getPaymentTransactionsCompletionsId($completionId, $spaceId);
+            // V2: getPaymentTransactionsCompletionsId($id, $space, $expand). Labels
+            // are a related entity this API omits unless expanded.
+            $sdkCompletion = $service->getPaymentTransactionsCompletionsId($completionId, $spaceId, ['labels']);
 
             // Defensive: treat an empty model (no ID) as not found as well.
             if ($sdkCompletion->getId() === null) {
@@ -186,8 +191,9 @@ class TransactionCompletionGateway implements TransactionCompletionGatewayInterf
             /** @var SdkTransactionCompletionsService $service */
             $service = $this->sdkProvider->getService(SdkTransactionCompletionsService::class);
 
-            // V2: getPaymentTransactionsCompletionsId($id, $space)
-            $sdkCompletion = $service->getPaymentTransactionsCompletionsId($completionId, $spaceId);
+            // V2: getPaymentTransactionsCompletionsId($id, $space, $expand). Labels
+            // are a related entity this API omits unless expanded.
+            $sdkCompletion = $service->getPaymentTransactionsCompletionsId($completionId, $spaceId, ['labels']);
 
             // Defensive: treat an empty model (no ID) as not found as well.
             if ($sdkCompletion->getId() === null) {
@@ -232,12 +238,16 @@ class TransactionCompletionGateway implements TransactionCompletionGatewayInterf
             $completion->state = State::from((string)$sdkCompletion->getState());
         }
 
-        $completion->lineItems = $sdkCompletion->getLineItems() ?? [];
+        if ($sdkCompletion->getLineItems()) {
+            $completion->lineItems = array_map([$this, 'mapToLineItem'], $sdkCompletion->getLineItems());
+        }
 
         $reason = $sdkCompletion->getFailureReason();
         if ($reason !== null) {
             $completion->failureReason = $this->mapSdkFailureReason($reason);
         }
+
+        $completion->labels = $this->mapToLabels($sdkCompletion->getLabels());
 
         return $completion;
     }
