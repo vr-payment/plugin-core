@@ -16,6 +16,7 @@ use VRPayment\PluginCore\Refund\RefundGatewayInterface;
 use VRPayment\PluginCore\Refund\State as StateEnum;
 use VRPayment\PluginCore\Sdk\DateTimeMapperTrait;
 use VRPayment\PluginCore\Sdk\FailureReasonMapperTrait;
+use VRPayment\PluginCore\Sdk\LabelMapperTrait;
 use VRPayment\PluginCore\Sdk\LineItemMapperTrait;
 use VRPayment\PluginCore\Sdk\SdkProvider;
 use VRPayment\Sdk\Model\CriteriaOperator as SdkCriteriaOperator;
@@ -34,6 +35,7 @@ class RefundGateway implements RefundGatewayInterface
     use DateTimeMapperTrait;
     use DomainLoggerTrait;
     use FailureReasonMapperTrait;
+    use LabelMapperTrait;
     use LineItemMapperTrait;
 
     private SdkRefundService $sdkRefundService;
@@ -150,6 +152,8 @@ class RefundGateway implements RefundGatewayInterface
         if (!empty($sdkReducedLineItems)) {
             $refund->reducedLineItems = new LineItemCollection(...array_map([$this, 'mapToLineItem'], $sdkReducedLineItems));
         }
+
+        $refund->labels = $this->mapToLabels($sdkRefund->getLabels());
 
         return $refund;
     }
