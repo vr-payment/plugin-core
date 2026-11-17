@@ -10,45 +10,31 @@ use VRPayment\PluginCore\Customer\PersonalDetails;
 use VRPayment\PluginCore\LineItem\LineItem;
 use VRPayment\PluginCore\LineItem\LineItemAttribute;
 use VRPayment\PluginCore\LineItem\LineItemAttributeCollection;
-use VRPayment\PluginCore\Localization\LocalizedString;
 use VRPayment\PluginCore\Log\DomainLoggerTrait;
 use VRPayment\PluginCore\Log\LogContext;
 use VRPayment\PluginCore\Log\LoggerInterface;
-use VRPayment\PluginCore\PaymentMethod\PaymentMethod;
 use VRPayment\PluginCore\PaymentMethod\PaymentMethodCollection;
-use VRPayment\PluginCore\PaymentMethod\State as PaymentMethodState;
 use VRPayment\PluginCore\Sdk\PaymentMethodMapperTrait;
 use VRPayment\PluginCore\Sdk\SdkProvider;
-use VRPayment\PluginCore\Sdk\SearchPaginationTrait;
 use VRPayment\PluginCore\Sdk\TransactionMapperTrait;
 use VRPayment\PluginCore\Settings\IntegrationMode as IntegrationModeEnum;
 use VRPayment\PluginCore\Settings\Settings;
 use VRPayment\PluginCore\Tax\Tax;
-use VRPayment\PluginCore\Token\State as TokenState;
-use VRPayment\PluginCore\Token\Token;
 use VRPayment\PluginCore\Transaction\Exception\TransactionException;
 use VRPayment\PluginCore\Transaction\PaymentUrl;
-use VRPayment\PluginCore\Transaction\State as StateEnum;
 use VRPayment\PluginCore\Transaction\Transaction;
 use VRPayment\PluginCore\Transaction\TransactionCollection;
 use VRPayment\PluginCore\Transaction\TransactionContext;
 use VRPayment\PluginCore\Transaction\TransactionGatewayInterface;
 use VRPayment\PluginCore\Transaction\TransactionSearchCriteria;
 use VRPayment\Sdk\ApiException;
-use VRPayment\Sdk\Model\Address as SdkAddress;
 use VRPayment\Sdk\Model\AddressCreate as SdkAddressCreate;
-use VRPayment\Sdk\Model\CreationEntityState as SdkCreationEntityState;
-use VRPayment\Sdk\Model\LineItem as SdkLineItem;
 use VRPayment\Sdk\Model\LineItemAttributeCreate as SdkLineItemAttributeCreate;
 use VRPayment\Sdk\Model\LineItemCreate as SdkLineItemCreate;
 use VRPayment\Sdk\Model\LineItemType as SdkLineItemType;
-use VRPayment\Sdk\Model\PaymentMethodConfiguration as SdkPaymentMethodConfiguration;
 use VRPayment\Sdk\Model\TaxCreate as SdkTaxCreate;
-use VRPayment\Sdk\Model\Token as SdkToken;
-use VRPayment\Sdk\Model\Transaction as SdkTransaction;
 use VRPayment\Sdk\Model\TransactionCreate as SdkTransactionCreate;
 use VRPayment\Sdk\Model\TransactionPending as SdkTransactionPending;
-use VRPayment\Sdk\Service\PaymentMethodConfigurationsService as SdkPaymentMethodConfigurationsService;
 use VRPayment\Sdk\Service\TransactionsService as SdkTransactionsService;
 
 #[LogContext(domain: 'transaction', subdomain: 'checkout')]
@@ -57,13 +43,11 @@ class TransactionGateway implements TransactionGatewayInterface
     use DomainLoggerTrait;
     use PaymentMethodMapperTrait;
     use TransactionMapperTrait;
-    use SearchPaginationTrait;
     /**
      * Related entities this API omits from a transaction unless they are expanded.
      */
     private const EXPAND = ['billingAddress', 'shippingAddress', 'lineItems', 'token'];
 
-    private SdkPaymentMethodConfigurationsService $paymentMethodConfigService;
     private SdkTransactionsService $transactionsService;
 
     public function __construct(
@@ -73,7 +57,6 @@ class TransactionGateway implements TransactionGatewayInterface
     ) {
         $this->initializeLogger($logger);
         $this->transactionsService = $this->sdkProvider->getService(SdkTransactionsService::class);
-        $this->paymentMethodConfigService = $this->sdkProvider->getService(SdkPaymentMethodConfigurationsService::class);
     }
 
     /**
@@ -314,50 +297,6 @@ class TransactionGateway implements TransactionGatewayInterface
                 'getPaymentTransactionsIdPaymentMethodConfigurations',
                 ['spaceId' => $spaceId, 'transactionId' => $transactionId],
                 'Unable to fetch the available payment methods.',
-            );
-        }
-    }
-
-    public function getPaymentMethodConfigurations(int $spaceId): PaymentMethodCollection
-    {
-        // Search for active payment method configurations using the V2 query syntax.
-        $query = "state:ACTIVE";
-
-        try {
-            // Paged rather than read in one call: a space with more active
-            // configurations than one page holds would otherwise silently lose the rest.
-            $items = iterator_to_array(
-                $this->paginateSearch(
-                    function (int $offset) use ($spaceId, $query): object {
-                        return $this->paymentMethodConfigService->getPaymentMethodConfigurationsSearch(
-                            $spaceId,
-                            null,
-                            SdkProvider::MAX_PAGE_SIZE,
-                            $offset,
-                            null,
-                            $query,
-                        );
-                    },
-                ),
-            );
-
-            $this->logger->debug("Gateway: Fetched payment method configurations.", [
-                'count' => count($items),
-                'spaceId' => $spaceId,
-            ]);
-
-            return new PaymentMethodCollection(...array_map([$this, 'mapToPaymentMethod'], $items));
-        } catch (\Throwable $e) {
-            $this->logger->error("Gateway: Failed to fetch payment method configurations.", [
-                'spaceId' => $spaceId,
-                'exception' => $e,
-            ]);
-            throw SdkProvider::wrapException(
-                $e,
-                TransactionException::class,
-                'getPaymentMethodConfigurationsSearch',
-                ['spaceId' => $spaceId],
-                'Failed to fetch payment method configurations.',
             );
         }
     }

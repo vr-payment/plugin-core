@@ -4,10 +4,8 @@ declare(strict_types=1);
 
 namespace VRPayment\PluginCore\Sdk\WebServiceAPIV2;
 
-use VRPayment\PluginCore\Charge\Attempt\ChargeAttempt;
 use VRPayment\PluginCore\Charge\ChargeGatewayInterface;
 use VRPayment\PluginCore\Charge\Exception\ChargeException;
-use VRPayment\PluginCore\Localization\LocalizedString;
 use VRPayment\PluginCore\Log\DomainLoggerTrait;
 use VRPayment\PluginCore\Log\LogContext;
 use VRPayment\PluginCore\Log\LoggerInterface;

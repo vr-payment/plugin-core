@@ -6,7 +6,6 @@ namespace VRPayment\PluginCore\LineItem;
 
 use VRPayment\PluginCore\GlobalData\Currency\CurrencyRoundingService;
 use VRPayment\PluginCore\LineItem\Exception\LineItemConsistencyException;
-use VRPayment\PluginCore\LineItem\LineItemCollection;
 use VRPayment\PluginCore\Localization\LocalizedString;
 use VRPayment\PluginCore\Log\DomainLoggerTrait;
 use VRPayment\PluginCore\Log\LogContext;

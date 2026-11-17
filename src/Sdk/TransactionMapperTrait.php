@@ -9,8 +9,6 @@ use VRPayment\PluginCore\Customer\CompanyDetails;
 use VRPayment\PluginCore\Customer\Gender;
 use VRPayment\PluginCore\Customer\PersonalDetails;
 use VRPayment\PluginCore\Localization\LocalizedString;
-use VRPayment\PluginCore\Token\State as TokenState;
-use VRPayment\PluginCore\Token\Token;
 use VRPayment\PluginCore\Transaction\State as StateEnum;
 use VRPayment\PluginCore\Transaction\Transaction;
 use VRPayment\PluginCore\Transaction\TransactionEnvironment;
@@ -19,7 +17,6 @@ use VRPayment\Sdk\Model\Address as SdkAddress;
 use VRPayment\Sdk\Model\PaymentConnector as SdkPaymentConnector;
 use VRPayment\Sdk\Model\PaymentConnectorConfiguration as SdkPaymentConnectorConfiguration;
 use VRPayment\Sdk\Model\PaymentMethodConfiguration as SdkPaymentMethodConfiguration;
-use VRPayment\Sdk\Model\Token as SdkToken;
 use VRPayment\Sdk\Model\Transaction as SdkTransaction;
 
 /**

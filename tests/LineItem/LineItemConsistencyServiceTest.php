@@ -7,7 +7,6 @@ namespace VRPayment\PluginCore\Tests\LineItem;
 use PHPUnit\Framework\TestCase;
 use VRPayment\PluginCore\LineItem\Exception\LineItemConsistencyException;
 use VRPayment\PluginCore\LineItem\LineItem;
-use VRPayment\PluginCore\LineItem\LineItemCollection;
 use VRPayment\PluginCore\LineItem\LineItemConsistencyService;
 use VRPayment\PluginCore\LineItem\RoundingStrategy;
 use VRPayment\PluginCore\Log\LoggerInterface;

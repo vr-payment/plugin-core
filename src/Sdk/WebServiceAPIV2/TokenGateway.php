@@ -16,7 +16,6 @@ use VRPayment\PluginCore\Token\Token;
 use VRPayment\PluginCore\Token\TokenGatewayInterface;
 use VRPayment\PluginCore\Token\TokenVersion;
 use VRPayment\Sdk\ApiException;
-use VRPayment\Sdk\Model\PaymentConnector as SdkPaymentConnector;
 use VRPayment\Sdk\Model\RestApiErrorResponse as SdkRestApiErrorResponse;
 use VRPayment\Sdk\Model\Token as SdkToken;
 use VRPayment\Sdk\Model\TokenVersion as SdkTokenVersion;

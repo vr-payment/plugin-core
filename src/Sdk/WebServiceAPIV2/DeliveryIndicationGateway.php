@@ -7,7 +7,6 @@ namespace VRPayment\PluginCore\Sdk\WebServiceAPIV2;
 use VRPayment\PluginCore\DeliveryIndication\DeliveryIndication;
 use VRPayment\PluginCore\DeliveryIndication\DeliveryIndicationGatewayInterface;
 use VRPayment\PluginCore\DeliveryIndication\Exception\DeliveryIndicationException;
-use VRPayment\PluginCore\Localization\LocalizedString;
 use VRPayment\PluginCore\Log\DomainLoggerTrait;
 use VRPayment\PluginCore\Log\LogContext;
 use VRPayment\PluginCore\Log\LoggerInterface;
@@ -16,7 +15,6 @@ use VRPayment\PluginCore\Sdk\SdkProvider;
 use VRPayment\Sdk\Model\DeliveryIndication as SdkDeliveryIndication;
 use VRPayment\Sdk\Model\DeliveryIndicationSearchResponse as SdkDeliveryIndicationSearchResponse;
 use VRPayment\Sdk\Model\RestApiErrorResponse as SdkRestApiErrorResponse;
-use VRPayment\Sdk\Model\Transaction as SdkTransaction;
 use VRPayment\Sdk\Service\DeliveryIndicationsService as SdkDeliveryIndicationsService;
 
 /**

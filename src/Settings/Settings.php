@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace VRPayment\PluginCore\Settings;
 
 use VRPayment\PluginCore\LineItem\RoundingStrategy;
-use VRPayment\PluginCore\Settings\IntegrationMode;
 
 /**
  * Provides access to validated configuration settings.

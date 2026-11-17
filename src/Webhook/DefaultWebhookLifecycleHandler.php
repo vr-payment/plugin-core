@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace VRPayment\PluginCore\Webhook;
 
 use VRPayment\PluginCore\Webhook\Enum\WebhookListener;
-use VRPayment\PluginCore\State\ValidatesStateTransitions;
 
 /**
  * Provides default implementations for the lifecycle hooks.

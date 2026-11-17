@@ -10,9 +10,6 @@ use VRPayment\PluginCore\Log\LogContext;
 use VRPayment\PluginCore\Log\LoggerInterface;
 use VRPayment\PluginCore\Token\Exception\MissingTokenException;
 use VRPayment\PluginCore\Transaction\Exception\TransactionException;
-use VRPayment\PluginCore\Transaction\Transaction;
-use VRPayment\PluginCore\Transaction\TransactionContext;
-use VRPayment\PluginCore\Transaction\TransactionService;
 
 /**
  * Service for handling recurring transactions.

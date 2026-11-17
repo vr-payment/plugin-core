@@ -11,7 +11,6 @@ use VRPayment\PluginCore\GlobalData\LabelDescriptor\LabelDescriptorCollection;
 use VRPayment\PluginCore\GlobalData\LabelDescriptorGroup\LabelDescriptorGroupCollection;
 use VRPayment\PluginCore\GlobalData\Language\LanguageCollection;
 use VRPayment\PluginCore\GlobalData\PaymentConnector\PaymentConnectorCollection;
-use VRPayment\PluginCore\Localization\LocalizedString;
 use VRPayment\PluginCore\Log\DomainLoggerTrait;
 use VRPayment\PluginCore\Log\LogContext;
 use VRPayment\PluginCore\Log\LoggerInterface;

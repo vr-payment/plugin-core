@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace VRPayment\PluginCore\Webhook\Listener;
 
 use VRPayment\PluginCore\Webhook\Command\WebhookCommandInterface;
-use VRPayment\PluginCore\Webhook\Enum\WebhookName;
 use VRPayment\PluginCore\Webhook\WebhookContext;
 
 /**
