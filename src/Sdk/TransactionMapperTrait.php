@@ -9,7 +9,6 @@ use VRPayment\PluginCore\Customer\CompanyDetails;
 use VRPayment\PluginCore\Customer\Gender;
 use VRPayment\PluginCore\Customer\PersonalDetails;
 use VRPayment\PluginCore\Localization\LocalizedString;
-use VRPayment\PluginCore\Token\Token;
 use VRPayment\PluginCore\Transaction\State as StateEnum;
 use VRPayment\PluginCore\Transaction\Transaction;
 use VRPayment\PluginCore\Transaction\TransactionEnvironment;
